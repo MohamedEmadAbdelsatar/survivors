@@ -75,18 +75,31 @@
 <div class="m_datatable m-datatable m-datatable--default m-datatable--loaded" id="local_data" style="">
         <table class="m-datatable__table" style="display: block; min-height: 300px; overflow-x: auto;">
             <thead class="m-datatable__head"><tr class="m-datatable__row" style="height: 56px;">
-                <th data-field="ID" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">index</span></th>
-                <th data-field="Hospital_Name" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Hospital Name</span></th>
+                <th data-field="ID" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 80px;">#</span></th>
+                <th data-field="Hospital_Name" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 130px;">Hospital Name</span></th>
                 <th data-field="Hospital_Address" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">User</span></th>
-                <th data-field="Actions" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Actions</span></th>
+                <th data-field="Blood Type" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Blood Type</span></th>
+                <th data-field="Amount" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">Amount</span></th>
+                <th data-field="Actions" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Actions</span></th>
             </thead>
             {{csrf_field()}}
         <tbody class="m-datatable__body" style="">
             @foreach($orders as $order)
             <tr data-row="0" class="m-datatable__row" style="height: 64px;" id="{{$order->id}}">
-                <td data-field="ID" class="m-datatable__cell"><span style="width: 110px;">{{$order->id}}</span></td>
-                <td data-field="ShipName" class="m-datatable__cell"><span style="width: 160px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->hospital_id){{$hospital->name}}@endif @endforeach</span></td>
+                <td data-field="ID" class="m-datatable__cell"><span style="width: 80px;">{{$loop->index+1}}</span></td>
+                <td data-field="ShipName" class="m-datatable__cell"><span style="width: 130px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->hospital_id){{$hospital->name}}@endif @endforeach</span></td>
                 <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 110px;">@foreach($users as $user) @if($user->id == $order->user_id){{$user->name}}@endif @endforeach</span></td>
+                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 110px;">@switch($order->blood_type)
+                    @case(1) {{"O+"}} @break
+                    @case(2) {{"O-"}} @break
+                    @case(3) {{"A+"}} @break
+                    @case(4) {{"A-"}} @break
+                    @case(5) {{"B+"}} @break
+                    @case(6) {{"B-"}} @break
+                    @case(7) {{"AB+"}} @break
+                    @case(8) {{"AB-"}} @break
+                    @endswitch</span></td>
+                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
                 <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></td>
             </tr>
             @endforeach

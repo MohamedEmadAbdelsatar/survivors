@@ -31,6 +31,11 @@ class HospitalController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        if($user->role_id != 1){
+            return redirect('/home');
+        }
         return view('admin.hospitals.create');
     }
 

@@ -16,9 +16,11 @@ class CreateHospitalsTable extends Migration
         Schema::create('hospitals', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name',40);
-            $table->string('address', 50);
+            $table->string('address', 255);
             $table->float('lat')->nullable();
             $table->float('lng')->nullable();
+            $table->string('email')->nullable();
+            $table->bigInteger('phone');
             $table->timestamps();
         });
     }

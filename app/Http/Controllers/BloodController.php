@@ -12,6 +12,9 @@ class BloodController extends Controller
 {
     public function modify_amounts(){
         $user = Auth::user();
+        if($user->role_id != 2){
+            return redirect('/home');
+        }
         $notifications = $user->notifications;
         $hospital_id = $user->hospital_id;
         $hospital = Hospital::find($hospital_id);

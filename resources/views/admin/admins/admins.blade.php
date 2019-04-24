@@ -78,29 +78,30 @@
         </div>
         <!--end: Search Form -->
 <!--begin: Datatable -->
-        <div class="m_datatable m-datatable m-datatable--default m-datatable--error m-datatable--loaded" id="ajax_data" style="position: static; zoom: 1;">
-            <table class="m-datatable__table" style="display: block; min-height: 300px; overflow-x: auto;content-align:center;">
-                <thead class="m-datatable__head">
-                    <tr class="m-datatable__row" style="height: 53px;">
-                        <th class="m-datatable__cell m-datatable__cell--sort">ID</th>
-                        <th class="m-datatable__cell m-datatable__cell--sort">Name</th>
-                        <th class="m-datatable__cell m-datatable__cell--sort">Role</th>
-                        <th class="m-datatable__cell m-datatable__cell--sort">Hospital</th>
-                        <th class="m-datatable__cell m-datatable__cell--sort">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="m-datatable__body" style="">
-                    @foreach ($users as $user)
-                        <tr data-row="0" class="m-datatable__row" style="width:100%;">
-                        <td class="m-datatable__cell m-datatable__cell--check">{{$user->id}}</td>
-                        <td class="m-datatable__cell m-datatable__cell--sort">{{$user->name}}</td>
-                        <td class="m-datatable__cell m-datatable__cell--sort">{{$user->role_id}}</td>
-                        <td class="m-datatable__cell m-datatable__cell--sort">{{$user->hospital_id}}</td>
-                        <td class="m-datatable__cell m-datatable__cell--sort"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="#"><i class="la la-edit"></i> Edit Details</a><a class="dropdown-item" href="#"><i class="la la-close"></i>Delete</a><a class="dropdown-item" href="#"><i class="la la-book"></i>View</a></div></div></td></tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+<div class="m_datatable m-datatable m-datatable--default m-datatable--loaded" id="local_data" style="">
+    <table class="m-datatable__table" style="display: block; min-height: 300px; overflow-x: auto;">
+        <thead class="m-datatable__head"><tr class="m-datatable__row" style="height: 56px;">
+            <th data-field="ID" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">#</span></th>
+            <th data-field="Admin_Name" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Name</span></th>
+            <th data-field="Admin_Hospital" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Hospital</span></th>
+            <th data-field="Admin_Phone" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Phone</span></th>
+            <th data-field="Admin_Role" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Role</span></th>
+            <th data-field="Actions" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Actions</span></th>
+        </thead>
+        <tbody class="m-datatable__body" style="">
+        @foreach($admins as $admin)
+            <tr data-row="0" class="m-datatable__row" style="height: 64px;">
+            <td data-field="ID" class="m-datatable__cell"><span style="width: 110px;">{{$loop->index+1}}</span></td>
+                <td data-field="Admin_Name" class="m-datatable__cell"><span style="width: 160px;">{{$admin->name}}</span></td>
+            <td data-field="Admin_Hospital" class="m-datatable__cell"><span style="width: 160px;">@foreach($hospitals as $hospital) @if($hospital->id == $admin->hospital_id) {{$hospital->name}} @endif @endforeach</span></td>
+                <td data-field="Admin_Phone" class="m-datatable__cell"><span style="width: 160px;">{{$admin->phone}}</span></td>
+            <td data-field="Admin_Role" class="m-datatable__cell"><span style="width: 160px;">@if($admin->role_id == 1) {{"Admin"}} @else {{"Hospital Admin"}} @endif</span></td>
+                <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('admins.edit',$admin->id)}}"><i class="la la-edit"></i> Edit</a><a class="dropdown-item" href="{{route('admins.show',$admin->id)}}"><i class="la flaticon-laptop"></i>Show</a></span></td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
+</div>
         <!--end: Datatable -->
     </div>
 </div>

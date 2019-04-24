@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Hospital;
+use Auth;
+use App\Orders;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -15,8 +17,15 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('admin.admins.admins',compact('users'));
+
+        $user = Auth::user();
+        if($user->role_id != 1){
+            return redirect('/home');
+        }
+        $notifications = $user->notifications;
+        $admins = User::all();
+        $hospitals = Hospital::all();
+        return view('admin.admins.admins',compact('admins','notifications','hospitals'));
     }
 
     /**
@@ -26,6 +35,10 @@ class AdminController extends Controller
      */
     public function create()
     {
+        $user = Auth::user();
+        if($user->role_id != 1){
+            return redirect('/home');
+        }
         $hospitals = Hospital::all();
         return view('admin.admins.create',compact('hospitals'));
     }
@@ -68,7 +81,14 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        //
+        $admin = Auth::user();
+        if($admin->role_id != 1){
+            return redirect('/home');
+        }
+        $notifications = $admin->notifications;
+        $hospital = Hospital::find($admin->hospital_id);
+        $orders = Orders::where('user_id',$admin->id)->get();
+        return view('admin.admins.show',compact('notifications','hospital','orders','admin'));
     }
 
     /**
@@ -79,7 +99,14 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = Auth::user();
+        if($user->role_id != 1){
+            return redirect('/home');
+        }
+        $notifications = $user->notifications;
+        $admin = User::find($id);
+        $hospitals = Hospital::all();
+        return view('admin.admins.edit',compact('admin','notifications','hospitals'));
     }
 
     /**
@@ -91,7 +118,27 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'phone' => 'required|numeric',
+        ]);
+
+
+        $admin = User::find($id);
+        $admin->name = $request->name;
+        $admin->email = $request->email;
+        if($request->password != null){
+            $request['password'] = bcrypt($request->password);
+            $admin->password = $request->password;
+        }
+        $admin->phone = $request->phone;
+        $admin->role_id = $request->role;
+        if($admin->role != 1){
+            $admin->hospital_id = $request->hospital_id;
+        }
+        $admin->save();
+        return redirect('/home')->with('success');
     }
 
     /**

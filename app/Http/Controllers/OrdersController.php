@@ -73,7 +73,11 @@ class OrdersController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        $order = Orders::find($id);
+        $hospital = Hospital::find($user->hospital_id);
+        return view('admin.orders.show',compact('notifications','order','hospital'));
     }
 
     /**
@@ -84,7 +88,10 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        $order = Orders::find($id);
+        return view('admin.orders.edit',compact('notifications','order'));
     }
 
     /**
@@ -96,7 +103,17 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            "amount"=>"required",
+        ]);
+        $user_id = Auth::user()->id;
+        $user = User::find($user_id);
+        $hospital_id = $user->hospital_id;
+        $order = Orders::find($id);
+        $order->blood_type = $request->blood_type;
+        $order->amount = $request->amount;
+        $order->save();
+        return redirect('orders')->withSuccess('Orderd updated Successfully');
     }
 
     /**
@@ -155,5 +172,13 @@ class OrdersController extends Controller
         $order->save();
         Notification::send($user, new ChangeStatus($details));
         return 'ok';
+    }
+    public function hospital_orders(){
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        $hospital = Hospital::find($user->hospital_id);
+        $orders = Orders::where('hospital_id',$user->hospital_id)->get();
+        $admins = User::where('hospital_id',$user->hospital_id)->get();
+        return view('admin.orders.hospital_orders',compact('notifications','hospital','orders','admins'));
     }
 }

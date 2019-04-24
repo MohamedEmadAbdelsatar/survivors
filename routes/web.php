@@ -28,5 +28,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('store_mod','BloodController@store_mod')->name('store_mod');
     Route::get('modify_about','AboutController@modify')->name('modify_about');
     Route::post('save_about','AboutController@save')->name('save_about');
+    Route::get('hospital_orders','OrdersController@hospital_orders')->name('hospital_orders');
 });
 

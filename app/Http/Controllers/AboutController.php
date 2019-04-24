@@ -11,6 +11,9 @@ class AboutController extends Controller
 {
     public function modify(){
         $user = Auth::user();
+        if($user->role_id != 1){
+            return redirect('/home');
+        }
         $notifications = $user->notifications;
         $about = About::find(1);
         return view('admin.about.modify',compact('notifications','about'));

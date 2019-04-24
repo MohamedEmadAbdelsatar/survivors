@@ -225,7 +225,7 @@
                     </li>
                     <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" data-menu-submenu-toggle="hover">
                             <a href="#" class="m-menu__link m-menu__toggle">
-                                <i class="m-menu__link-icon flaticon-interface-6"></i>
+                                <i class="m-menu__link-icon flaticon-medical"></i>
                                 <span class="m-menu__link-text">
                                     Hospitals
                                 </span>
@@ -262,7 +262,8 @@
                                             </span>
                                         </a>
                                     </li>
-                                    @if(Auth::user()->role_id != 1)
+                                    @endif
+                                    @if(Auth::user()->role_id == 2)
                                     <li class="m-menu__item " aria-haspopup="true">
                                             <a href="{{route('modify_blood')}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -274,14 +275,14 @@
                                                 </a>
                                             </li>
                                             @endif
-                                    @endif
+
                                 </ul>
                             </div>
                         </li>
-                        @if(Auth::user()->role_id ==1)
+
                         <li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
 								<a href="#" class="m-menu__link m-menu__toggle">
-									<i class="m-menu__link-icon flaticon-interface-6"></i>
+									<i class="m-menu__link-icon flaticon-pie-chart"></i>
 									<span class="m-menu__link-text">
 										Orders
 									</span>
@@ -296,7 +297,8 @@
 													Orders
 												</span>
 											</span>
-										</li>
+                                        </li>
+                                        @if(Auth::user()->role_id ==1)
 										<li class="m-menu__item " aria-haspopup="true">
                                         <a href="{{route('pending_orders')}}" class="m-menu__link ">
 												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -306,15 +308,38 @@
 													Pending Orders
 												</span>
 											</a>
-										</li>
+                                        </li>
+                                        @endif
+                                        @if(Auth::user()->role_id == 2)
+                                        <li class="m-menu__item " aria-haspopup="true">
+                                            <a href="{{route('hospital_orders')}}" class="m-menu__link ">
+                                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                        <span></span>
+                                                    </i>
+                                                    <span class="m-menu__link-text">
+                                                        Hospital's Orders
+                                                    </span>
+                                                </a>
+                                            </li>
+                                        <li class="m-menu__item " aria-haspopup="true">
+                                                <a href="{{route('orders.create')}}" class="m-menu__link ">
+                                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                            <span></span>
+                                                        </i>
+                                                        <span class="m-menu__link-text">
+                                                            Create Order
+                                                        </span>
+                                                    </a>
+                                        </li>
+                                        @endif
 									</ul>
 								</div>
                             </li>
-                            @endif
+
                             @if(Auth::user()->role_id == 1)
                             <li class="m-menu__item m-menu__item--submenu m-menu__item--open" aria-haspopup="true" data-menu-submenu-toggle="hover">
                                     <a href="#" class="m-menu__link m-menu__toggle">
-                                        <i class="m-menu__link-icon flaticon-interface-6"></i>
+                                        <i class="m-menu__link-icon flaticon-cogwheel-1"></i>
                                         <span class="m-menu__link-text">
                                             Admins
                                         </span>

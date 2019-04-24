@@ -20,9 +20,9 @@
                     -
                 </li>
                 <li class="m-nav__item">
-                    <a href="/hospital" class="m-nav__link">
+                    <a href="/admins" class="m-nav__link">
                         <span class="m-nav__link-text">
-                            Hospitals
+                            Admins
                         </span>
                     </a>
                 </li>
@@ -30,9 +30,9 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                    <a href="{{route('hospital.show',$hospital->id)}}" class="m-nav__link">
+                    <a href="{{route('admins.show',$admin->id)}}" class="m-nav__link">
                             <span class="m-nav__link-text">
-                                Hospital Information
+                                Admin Information
                             </span>
                         </a>
                     </li>
@@ -48,65 +48,24 @@
                         <i class="la la-gear"></i>
                     </span>
                     <h3 class="m-portlet__head-text">
-                        Hospital Information
+                        Admin Informations
                     </h3>
                 </div>
             </div>
         </div>
-
-    <input type="hidden" id="lat" value="{{$hospital->lat}}">
-    <input type="hidden" id="lng" value="{{$hospital->lng}}">
-
             <div class="m-portlet__body col-md-12">
-                    <div id="map" style="height:400px;width: 100%;padding-top:0px;margin-bottom:40px;"></div>
-                    <div class="row" style="margin-bottom:20px;">
-                        <div class="col-md-6"><p> Hospital Name: {{$hospital->name}}</p></div>
-                        <div class="col-md-6"><p> Hospital Address: {{$hospital->address}}</p></div>
+                    <div class="row">
+                        <div class="col-md-6"><p> Admin Name: {{$admin->name}}</p></div>
+                        <div class="col-md-6"><p> Admin Mail: {{$admin->email}}</p></div>
                     </div>
                     <div class="row">
-                            <div class="col-md-6"><p> Hospital Phone: {{$hospital->phone}}</p></div>
-                            <div class="col-md-6"><p> Hospital Mail: {{$hospital->mail}}</p></div>
+                            <div class="col-md-6"><p> Admin Phone: {{$admin->phone}}</p></div>
+                    <div class="col-md-3"><p> Admin Role: @if($admin->role_id == 1) {{"Admin"}} @else {{"Hospital Admin"}}@endif</p></div>
+                        @if($admin->role_id != 1)<div class="col-md-3"><p> Hospital Name: {{$hospital->name}}</p></div>@endif
                     </div>
+                    @if($admin->role_id != 1)
                     <hr>
-                    <h4>Hospital Addmins</h4>
-                    <table class="table table-striped m-table">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        #
-                                    </th>
-                                    <th>
-                                        Name
-                                    </th>
-                                    <th>
-                                        Phone
-                                    </th>
-                                    <th>
-                                        Mail
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($users as $user)
-                                <tr>
-                                    <th scope="row">
-                                        {{$loop->index+1}}
-                                    </th>
-                                    <td>
-                                        {{$user->name}}
-                                    </td>
-                                    <td>
-                                        {{$user->phone}}
-                                    </td>
-                                    <td>
-                                        {{$user->mail}}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <hr>
-                        <h4>Orders</h4>
+                        <h4>Orders by this Admin</h4>
                         <table class="table table-striped m-table">
                                 <thead>
                                     <tr>
@@ -118,9 +77,6 @@
                                         </th>
                                         <th>
                                             Amount
-                                        </th>
-                                        <th>
-                                            Admin
                                         </th>
                                         <th>
                                             Status
@@ -149,11 +105,6 @@
                                             {{$order->amount}}
                                         </td>
                                         <td>
-                                            @foreach ($users as $user)
-                                            @if($user->id == $order->user_id) {{$user->name}} @endif
-                                            @endforeach
-                                        </td>
-                                        <td>
                                             @switch($order->status)
                                             @case(1) <span class="m-badge m-badge--brand m-badge--wide">Pending</span> @break
                                             @case(2) <span class="m-badge  m-badge--success m-badge--wide">Accepted</span> @break
@@ -164,35 +115,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            @endif
             </div>
     </div>
 
-@endsection
-@section('scripts')
-
-<script>
-    var a = parseFloat(document.getElementById('lat').value);
-    console.log(a)
-    var b = parseFloat(document.getElementById('lng').value);
-        // Initialize and add the map
-        function initMap() {
-          // The location of Uluru
-          var uluru = {lat: a, lng: b};
-          // The map, centered at Uluru
-          var map = new google.maps.Map(
-              document.getElementById('map'), {zoom: 15, center: uluru});
-          // The marker, positioned at Uluru
-          var marker = new google.maps.Marker({position: uluru, map: map});
-
-        }
-
-            </script>
-            <!--Load the API from the specified URL
-            * The async attribute allows the browser to render the page while the API loads
-            * The key parameter will contain your own API key (which is not needed for this tutorial)
-            * The callback parameter executes the initMap() function
-            -->
-            <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrXPHNArrZmglifJOO-0KgaG0OH-7rDLM&callback=initMap">
-            </script>
 @endsection
