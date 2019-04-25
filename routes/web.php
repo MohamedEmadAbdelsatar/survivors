@@ -29,5 +29,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('modify_about','AboutController@modify')->name('modify_about');
     Route::post('save_about','AboutController@save')->name('save_about');
     Route::get('hospital_orders','OrdersController@hospital_orders')->name('hospital_orders');
+    Route::get('modify_blood_spec','BloodController@modify_amounts_spec')->name('modify_blood_spec');
 });
 

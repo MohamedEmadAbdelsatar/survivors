@@ -82,7 +82,54 @@
                             Follow Order
                         </button>*(Future Plan)</div>
                     </div>
+                    <div class="row">
+                        <center><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></center>
+                    </div>
             </div>
     </div>
 
+@endsection
+@section('scripts')
+<script sec="{{asset('default/assets/jquery-3.4.0.min.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $('.accept').click(function(){
+            var id = $(this).parent().parent().attr('id');
+            var token = $('input[name="_token"]').val();
+            $.ajax({
+                url:'/pending_action',
+                method:'post',
+                data:{
+                    id:id,
+                    _token:token,
+                    action:'accept'
+                },
+                success:function(response){
+                    $(this).parent().remove()
+                }
+            });
+        });
+        $('.refuse').click(function(){
+            var id = $(this).parent().parent().attr('id');
+            var token = $('input[name="_token"]').val();
+            $.ajax({
+                url:'/pending_action',
+                method:'post',
+                data:{
+                    id:id,
+                    _token:token,
+                    action:'refuse'
+                },
+                success:function(response){
+                    $(this).parent().remove()
+                }
+            });
+        });
+        $(document).ajaxStart(function () {
+        $("#loading").show();
+        }).ajaxStop(function () {
+        $("#loading").hide();
+    });
+    });
+</script>
 @endsection

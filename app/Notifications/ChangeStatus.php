@@ -55,7 +55,8 @@ class ChangeStatus extends Notification
     public function toArray($notifiable)
     {
         return [
-            'notification_body' => $this->details['notification_body']
+            'notification_body' => $this->details['notification_body'],
+            'order_id' => $this->details['order_id']
         ];
     }
 }

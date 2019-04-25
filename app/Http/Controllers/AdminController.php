@@ -39,8 +39,9 @@ class AdminController extends Controller
         if($user->role_id != 1){
             return redirect('/home');
         }
+        $notifications = $user->notifications;
         $hospitals = Hospital::all();
-        return view('admin.admins.create',compact('hospitals'));
+        return view('admin.admins.create',compact('hospitals','notifications'));
     }
 
     /**
@@ -69,7 +70,7 @@ class AdminController extends Controller
             $admin->hospital_id = $request->hospital_id;
         }
         $admin->save();
-        return redirect('/admins')->with('success');
+        return redirect('/admins')->withSuccess('Admin Created Successfully');
 
     }
 
@@ -138,7 +139,7 @@ class AdminController extends Controller
             $admin->hospital_id = $request->hospital_id;
         }
         $admin->save();
-        return redirect('/home')->with('success');
+        return redirect('/home')->withSuccess('Admin Information Updated Successfully');
     }
 
     /**

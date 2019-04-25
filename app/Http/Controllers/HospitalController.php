@@ -36,7 +36,7 @@ class HospitalController extends Controller
         if($user->role_id != 1){
             return redirect('/home');
         }
-        return view('admin.hospitals.create');
+        return view('admin.hospitals.create',compact('notifications'));
     }
 
     /**

@@ -133,7 +133,7 @@
                                                         <div class="m-list-timeline__item" style="height:40px;">
                                                             <span class="m-list-timeline__badge -m-list-timeline__badge--state-success"></span>
                                                             <span class="m-list-timeline__text">
-                                                                {{$notification->data['notification_body']}}
+                                                            <a href="/orders/{{$notification->data['order_id']}}">{{$notification->data['notification_body']}}</a>
                                                             </span>
                                                         </div>
                                                         @endforeach
@@ -263,7 +263,7 @@
                                         </a>
                                     </li>
                                     @endif
-                                    @if(Auth::user()->role_id == 2)
+                                    @if(Auth::user()->role_id == )
                                     <li class="m-menu__item " aria-haspopup="true">
                                             <a href="{{route('modify_blood')}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -274,7 +274,7 @@
                                                     </span>
                                                 </a>
                                             </li>
-                                            @endif
+                                    @endif
 
                                 </ul>
                             </div>
@@ -298,7 +298,6 @@
 												</span>
 											</span>
                                         </li>
-                                        @if(Auth::user()->role_id ==1)
 										<li class="m-menu__item " aria-haspopup="true">
                                         <a href="{{route('pending_orders')}}" class="m-menu__link ">
 												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -309,8 +308,7 @@
 												</span>
 											</a>
                                         </li>
-                                        @endif
-                                        @if(Auth::user()->role_id == 2)
+
                                         <li class="m-menu__item " aria-haspopup="true">
                                             <a href="{{route('hospital_orders')}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -331,7 +329,7 @@
                                                         </span>
                                                     </a>
                                         </li>
-                                        @endif
+
 									</ul>
 								</div>
                             </li>
@@ -355,6 +353,16 @@
                                                     </span>
                                                 </span>
                                             </li>
+                                            <li class="m-menu__item " aria-haspopup="true">
+                                                <a href="/admins" class="m-menu__link ">
+                                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                            <span></span>
+                                                        </i>
+                                                        <span class="m-menu__link-text">
+                                                            All Admins
+                                                        </span>
+                                                    </a>
+                                                </li>
                                             <li class="m-menu__item " aria-haspopup="true">
                                             <a href="{{route('admins.create')}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
