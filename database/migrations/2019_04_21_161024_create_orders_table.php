@@ -18,6 +18,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('hospital_id');
             $table->bigInteger('user_id');
             $table->integer('amount');
+            $table->integer('blood_type');
             $table->integer('status');
             $table->timestamps();
         });
