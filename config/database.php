@@ -44,11 +44,11 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'db4free.com'),
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'survivors'),
-            'username' => env('DB_USERNAME', 'm7md3mad'),
-            'password' => env('DB_PASSWORD', 'Medo321546'),
+            'database' => env('DB_DATABASE', 'survivors2'),
+            'username' => env('DB_USERNAME', 'mohamed'),
+            'password' => env('DB_PASSWORD', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

@@ -14,9 +14,8 @@ class UserSeeder extends Seeder
             'name' => 'test',
             'email' => 'test@test.com',
             'password' => bcrypt('123456789'),
-            'hospital_id' => 'null',
             'role_id' => '1',
-            'phone' => 'null',
+            'phone' => '01234567890',
         ]);
         \App\User::firstOrCreate([
             'name' => 'test2',

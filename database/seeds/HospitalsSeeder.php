@@ -12,7 +12,7 @@ class HospitalsSeeder extends Seeder
     public function run()
     {
         \App\Hospital::firstOrCreate([
-            'hospital_name' => 'Shoubra Hospital',
+            'name' => 'Shoubra Hospital',
             'address' => '29 Baktomar, Al Mabyadah, Rawd Al Farag, Cairo Governorate, Egypt',
             'phone' => '01234567890',
             'email' => 'test@test.com1',
