@@ -170,10 +170,18 @@ class OrdersController extends Controller
     public function show_pending(){
         $user = Auth::user();
         $notifications = $user->notifications;
-        $hospital = Hospital::find($user->hospital_id);
-        $orders = Orders::where(['status'=>1],['to_id'=>$hospital->id])->get();
-        $users = User::all();
-        $hospitals = Hospital::all();
+        if($user->role_id == 1){
+            $orders = Orders::where(['status'=>1])->get();
+            $users = User::all();
+            $hospitals = Hospital::all();
+        } else {
+            $hospital = Hospital::find($user->hospital_id);
+            $orders = Orders::where(['status'=>1],['to_id'=>$hospital->id])->get();
+            $users = User::all();
+            $hospitals = Hospital::all();
+        }
+
+
         return view('admin.orders.pending',compact('orders','users','hospitals','notifications'));
     }
 
