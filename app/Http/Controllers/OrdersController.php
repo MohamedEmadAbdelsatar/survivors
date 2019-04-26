@@ -68,13 +68,16 @@ class OrdersController extends Controller
         $other_hospitals = Hospital::where('id','!=',$hospital_id)->get();
         $distance = 0;
         $to_id = null;
-        foreach($other_hospitals as $other){
-            $new_destance = $this->check_destance($current_hospital->lat, $current_hospital->lng, $other->lat,$other->lng);
-            if($new_destance < $distance){
-                $distance = $new_destance;
-                $to_id = $other->id;
+        if(count($other_hospitals) != 0){
+            foreach($other_hospitals as $other){
+                $new_destance = $this->check_destance($current_hospital->lat, $current_hospital->lng, $other->lat,$other->lng);
+                if($new_destance < $distance){
+                    $distance = $new_destance;
+                    $to_id = $other->id;
+                }
             }
         }
+
         $dest_hospital = Hospital::find($to_id);
         $order = new Orders;
         $order->blood_type = $request->blood_type;
@@ -95,13 +98,17 @@ class OrdersController extends Controller
             case 7: $blood_type = "AB+"; break;
             case 8: $blood_type = "AB-"; break;
         }
+
         $details = [
-            'greeting' => 'Hi '.$dest_hospital->name."Admin",
-            'body' => $current_hospital->name.' orderd '.$amount.' of '.$blood_type,
-            'thanks' => 'Thank you for using survivors.com ',
-            'notification_body' => $current_hospital->name.' orderd '.$amount.' of '.$blood_type
-        ];
-        $receivers = User::where('hospital_id',$to_id)->get();
+                'greeting' => 'Hi,',
+                'body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
+                'thanks' => 'Thank you for using survivors.com ',
+                'notification_body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type
+            ];
+
+
+        $receivers = User::where('hospital_id',$to_id)
+                            ->orwhere('role_id',1)->get();
         Notification::send($receivers, new ChangeStatus($details));
         return redirect('orders')->withSuccess('Orderd is sent');
     }
@@ -261,9 +268,9 @@ class OrdersController extends Controller
                 }
                 $details = [
                     'greeting' => 'Hi '.$dest_hospital->name."Admin",
-                    'body' => $receiver_hospital->name.' orderd '.$amount.' of '.$blood_type,
+                    'body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
                     'thanks' => 'Thank you for using survivors.com ',
-                    'notification_body' => $receiver_hospital->name.' orderd '.$amount.' of '.$blood_type
+                    'notification_body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type
                 ];
                 $receivers = User::where('hospital_id',$to_id)->get();
                 Notification::send($receivers, new ChangeStatus($details));

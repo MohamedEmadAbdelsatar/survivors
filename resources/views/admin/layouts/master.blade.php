@@ -330,6 +330,7 @@
                                                 </a>
                                             </li>
                                             @endif
+                                            @if(Auth::user()->role_id == 2)
                                         <li class="m-menu__item " aria-haspopup="true">
                                                 <a href="{{route('orders.create')}}" class="m-menu__link ">
                                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -340,7 +341,7 @@
                                                         </span>
                                                     </a>
                                         </li>
-
+                                        @endif
 									</ul>
 								</div>
                             </li>
