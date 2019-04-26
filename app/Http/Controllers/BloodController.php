@@ -10,22 +10,21 @@ use App\Hospital;
 
 class BloodController extends Controller
 {
-    public function modify_amounts(){
+    public function modify_amounts($hospital_id = null){
         $user = Auth::user();
         $notifications = $user->notifications;
-        $hospital_id = $user->hospital_id;
-        $hospital = Hospital::find($hospital_id);
-        $balance = Blood::where('hospital_id',$hospital_id)->first();
-        return view('admin.blood.modify',compact('balance','notifications','hospital'));
+        if($user->role_id == 1 && $hospital_id != null ){
+            $hospital = Hospital::find($hospital_id);
+            $balance = Blood::where('hospital_id',$hospital_id)->first();
+            return view('admin.blood.modify',compact('balance','notifications','hospital'));
+        } else {
+            $hospital_id = $user->hospital_id;
+            $hospital = Hospital::find($hospital_id);
+            $balance = Blood::where('hospital_id',$hospital_id)->first();
+            return view('admin.blood.modify',compact('balance','notifications','hospital'));
+        }
     }
-    public function modify_blood_spec($hospital_id)
-    {
-        $user = Auth::user();
-        $notifications = $user->notifications;
-        $hospital = Hospital::find($hospital_id);
-        $balance = Blood::where('hospital_id',$hospital_id)->first();
-        return view('admin.blood.modify',compact('balance','notifications','hospital'));
-    }
+
     public function store_mod(Request $request){
         $user = Auth::user();
         $hospital_id = $user->hospital_id;

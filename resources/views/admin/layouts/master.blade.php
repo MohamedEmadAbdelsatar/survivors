@@ -61,8 +61,8 @@
                 <div class="m-stack__item m-brand  m-brand--skin-dark ">
                     <div class="m-stack m-stack--ver m-stack--general">
                         <div class="m-stack__item m-stack__item--middle m-brand__logo">
-                            <a href="#" class="m-brand__logo-wrapper">
-                                survivors
+                            <a href="/home" class="m-brand__logo-wrapper" id="brand" style="font-size:23px;line-height:30px;text-decoration:none;">
+                                <b>SURVIVORS</b>
                             </a>
                         </div>
                         <div class="m-stack__item m-stack__item--middle m-brand__tools">
@@ -77,9 +77,7 @@
                             </a>
                             <!-- END -->
                             <!-- BEGIN: Responsive Header Menu Toggler -->
-                            <a id="m_aside_header_menu_mobile_toggle" href="javascript:;" class="m-brand__icon m-brand__toggler m--visible-tablet-and-mobile-inline-block">
-                                <span></span>
-                            </a>
+
                             <!-- END -->
                             <!-- BEGIN: Topbar Toggler -->
                             <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
@@ -97,7 +95,6 @@
                             <ul class="m-topbar__nav m-nav m-nav--inline">
                                 <li class="m-nav__item m-topbar__notifications m-topbar__notifications--img m-dropdown m-dropdown--large m-dropdown--header-bg-fill m-dropdown--arrow m-dropdown--align-center m-dropdown--mobile-full-width" data-dropdown-toggle="click" data-dropdown-persistent="true" aria-expanded="true">
                                     <a href="#" class="m-nav__link m-dropdown__toggle" id="m_topbar_notification_icon">
-                                        <span class="m-nav__link-badge m-badge m-badge--dot m-badge--dot-small m-badge--danger"></span>
                                         <span class="m-nav__link-icon">
                                             <i class="flaticon-music-2"></i>
                                         </span>
@@ -172,6 +169,18 @@
                                             <div class="m-dropdown__body">
                                                 <div class="m-dropdown__content">
                                                     <ul class="m-nav m-nav--skin-light">
+                                                            <li class="m-nav__item">
+                                                            <a href="{{route('admins.edit',Auth::user()->id)}}" class="m-nav__link">
+																		<i class="m-nav__link-icon flaticon-profile-1"></i>
+																		<span class="m-nav__link-title">
+																			<span class="m-nav__link-wrap">
+																				<span class="m-nav__link-text">
+                                                                                Edit Profile
+																				</span>
+																			</span>
+																		</span>
+																	</a>
+																</li>
                                                         <li class="m-nav__section m--hide">
                                                             <span class="m-nav__section-text">
                                                                 Section
@@ -241,6 +250,7 @@
                                             </span>
                                         </span>
                                     </li>
+                                    @if(Auth::user()->role_id == 1)
                                     <li class="m-menu__item " aria-haspopup="true">
                                         <a href="/hospital" class="m-menu__link ">
                                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -251,7 +261,7 @@
                                             </span>
                                         </a>
                                     </li>
-                                    @if(Auth::user()->role_id == 1)
+
                                     <li class="m-menu__item " aria-haspopup="true">
                                     <a href="{{route('hospital.create')}}" class="m-menu__link ">
                                             <i class="m-menu__link-bullet m-menu__link-bullet--dot">
@@ -265,7 +275,7 @@
                                     @endif
                                     @if(Auth::user()->role_id == 2)
                                     <li class="m-menu__item " aria-haspopup="true">
-                                            <a href="{{route('modify_blood')}}" class="m-menu__link ">
+                                            <a href="{{route('blood/modify')}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                         <span></span>
                                                     </i>
@@ -299,7 +309,7 @@
 											</span>
                                         </li>
 										<li class="m-menu__item " aria-haspopup="true">
-                                        <a href="{{route('pending_orders')}}" class="m-menu__link ">
+                                        <a href="{{route('orders/pending')}}" class="m-menu__link ">
 												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
 													<span></span>
 												</i>
@@ -310,7 +320,7 @@
                                         </li>
                                         @if(Auth::user()->role_id == 2)
                                         <li class="m-menu__item " aria-haspopup="true">
-                                            <a href="{{route('hospital_orders')}}" class="m-menu__link ">
+                                            <a href="{{route('hospital/orders')}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                         <span></span>
                                                     </i>
@@ -378,7 +388,7 @@
                                     </div>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true">
-                                        <a href="{{route('modify_about')}}" class="m-menu__link ">
+                                        <a href="{{route('about/modify')}}" class="m-menu__link ">
                                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                     <span></span>
                                                 </i>

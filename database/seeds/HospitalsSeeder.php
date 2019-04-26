@@ -19,5 +19,13 @@ class HospitalsSeeder extends Seeder
             'lat' => '30.08',
             'lng' => '31.24',
         ]);
+        \App\Hospital::firstOrCreate([
+            'name' => 'nasr Hospital',
+            'address' => '25 Baktomar, Al Mabyadah, Rawd Al Farag, Cairo Governorate, Egypt',
+            'phone' => '01236767890',
+            'email' => 'test3@test.com',
+            'lat' => '32.08',
+            'lng' => '33.24',
+        ]);
     }
 }

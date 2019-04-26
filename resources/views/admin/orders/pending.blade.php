@@ -19,17 +19,7 @@
                     -
                 </li>
                 <li class="m-nav__item">
-                <a href="/orders" class="m-nav__link">
-                        <span class="m-nav__link-text">
-                            Orders
-                        </span>
-                    </a>
-                </li>
-                <li class="m-nav__separator">
-                    -
-                </li>
-                <li class="m-nav__item">
-                <a href="{{route('pending_orders')}}" class="m-nav__link">
+                <a href="{{route('orders/pending')}}" class="m-nav__link">
                         <span class="m-nav__link-text">
                             Pending Orders
                         </span>
@@ -75,20 +65,21 @@
 <div class="m_datatable m-datatable m-datatable--default m-datatable--loaded" id="local_data" style="">
         <table class="m-datatable__table" style="display: block; min-height: 300px; overflow-x: auto;">
             <thead class="m-datatable__head"><tr class="m-datatable__row" style="height: 56px;">
-                <th data-field="ID" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 80px;">#</span></th>
+                <th data-field="ID" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 50px;">#</span></th>
                 <th data-field="Hospital_Name" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 130px;">Hospital Name</span></th>
-                <th data-field="Hospital_Address" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">User</span></th>
+                <th data-field="User" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 80px;">User</span></th>
                 <th data-field="Blood Type" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Blood Type</span></th>
                 <th data-field="Amount" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">Amount</span></th>
+                <th data-field="price" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 170px;">Price</span></th>
                 <th data-field="Actions" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Actions</span></th>
             </thead>
             {{csrf_field()}}
         <tbody class="m-datatable__body" style="">
             @foreach($orders as $order)
             <tr data-row="0" class="m-datatable__row" style="height: 64px;" id="{{$order->id}}">
-                <td data-field="ID" class="m-datatable__cell"><span style="width: 80px;">{{$loop->index+1}}</span></td>
+                <td data-field="ID" class="m-datatable__cell"><span style="width: 50px;">{{$loop->index+1}}</span></td>
                 <td data-field="ShipName" class="m-datatable__cell"><span style="width: 130px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->hospital_id){{$hospital->name}}@endif @endforeach</span></td>
-                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 110px;">@foreach($users as $user) @if($user->id == $order->user_id){{$user->name}}@endif @endforeach</span></td>
+                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 80px;">@foreach($users as $user) @if($user->id == $order->user_id){{$user->name}}@endif @endforeach</span></td>
                 <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 110px;">@switch($order->blood_type)
                     @case(1) {{"O+"}} @break
                     @case(2) {{"O-"}} @break
@@ -100,6 +91,7 @@
                     @case(8) {{"AB-"}} @break
                     @endswitch</span></td>
                 <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
+                <td data-field="Price" class="m-datatable__cell"><span style="width: 170px;"><input type="number" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Price" name="price"></span></td>
                 <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></td>
             </tr>
             @endforeach
@@ -122,25 +114,32 @@
     $(document).ready(function(){
         $('.accept').click(function(){
             var id = $(this).parent().parent().attr('id');
-            var token = $('input[name="_token"]').val();
-            $.ajax({
-                url:'/pending_action',
-                method:'post',
-                data:{
-                    id:id,
-                    _token:token,
-                    action:'accept'
-                },
-                success:function(response){
-                    $('tr#'+id).remove()
-                }
-            });
+            var price = $(this).parent().parent().find('input[name=price]').val();
+            if(price ==""){
+                alert('You Should Enter The price ')
+            } else {
+                var token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:'/orders/action',
+                    method:'post',
+                    data:{
+                        id:id,
+                        _token:token,
+                        action:'accept',
+                        price:price
+                    },
+                    success:function(response){
+                        $('tr#'+id).remove()
+                    }
+                });
+            }
+
         });
         $('.refuse').click(function(){
             var id = $(this).parent().parent().attr('id');
             var token = $('input[name="_token"]').val();
             $.ajax({
-                url:'/pending_action',
+                url:'/orders/action',
                 method:'post',
                 data:{
                     id:id,

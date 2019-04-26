@@ -101,8 +101,10 @@ class AdminController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
-        if($user->role_id != 1){
-            return redirect('/home');
+        if($user->id != $id){
+            if($user->role_id != 1){
+                return redirect('/home');
+            }
         }
         $notifications = $user->notifications;
         $admin = User::find($id);

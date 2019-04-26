@@ -25,5 +25,13 @@ class UserSeeder extends Seeder
             'role_id' => '2',
             'phone' => '01234567890',
         ]);
+        \App\User::firstOrCreate([
+            'name' => 'test3',
+            'email' => 'test3@test.com',
+            'password' => bcrypt('123456789'),
+            'hospital_id' => '2',
+            'role_id' => '2',
+            'phone' => '01236767890',
+        ]);
     }
 }

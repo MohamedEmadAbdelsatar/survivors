@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center">
         <div class="mr-auto">
             <h3 class="m-subheader__title m-subheader__title--separator">
-                Admins
+                About Us
             </h3>
             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                 <li class="m-nav__item m-nav__item--home">
@@ -20,7 +20,7 @@
                     -
                 </li>
                 <li class="m-nav__item">
-                    <a href="{{route('modify_about')}}" class="m-nav__link">
+                    <a href="{{route('about/modify')}}" class="m-nav__link">
                         <span class="m-nav__link-text">
                             Modify AboutUs
                         </span>
@@ -44,7 +44,7 @@
             </div>
         </div>
         <!--begin::Form-->
-    <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('save_about')}}" method="POST" enctype="multipart/form-data">
+    <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('about/update')}}" method="POST" enctype="multipart/form-data">
             {{ csrf_field()}}
             <div class="m-portlet__body">
             <div class="row">

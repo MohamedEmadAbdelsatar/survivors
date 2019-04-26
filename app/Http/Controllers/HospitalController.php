@@ -19,6 +19,9 @@ class HospitalController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if($user->role_id != 1){
+            return redirect('/home');
+        }
         $notifications = $user->notifications;
         $hospitals = Hospital::all();
         return view('admin.hospitals.hospitals',compact('hospitals','notifications'));

@@ -19,16 +19,16 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/home', 'HomeController@index')->name('home');
+
+    Route::get('orders/pending','OrdersController@show_pending')->name('orders/pending');
+    Route::post('orders/action','OrdersController@pending_action')->name('orders/action');
+    Route::get('blood/modify','BloodController@modify_amounts')->name('blood/modify');
+    Route::post('blood/update','BloodController@store_mod')->name('blood/update');
+    Route::get('about/modify','AboutController@modify')->name('about/modify');
+    Route::post('about/update','AboutController@save')->name('about/update');
+    Route::get('hospital/orders','OrdersController@hospital_orders')->name('hospital/orders');
     Route::resource('hospital','HospitalController');
     Route::resource('admins','AdminController');
     Route::resource('orders','OrdersController');
-    Route::get('pending_orders','OrdersController@show_pending')->name('pending_orders');
-    Route::post('pending_action','OrdersController@pending_action')->name('pending_action');
-    Route::get('modify_blood','BloodController@modify_amounts')->name('modify_blood');
-    Route::post('store_mod','BloodController@store_mod')->name('store_mod');
-    Route::get('modify_about','AboutController@modify')->name('modify_about');
-    Route::post('save_about','AboutController@save')->name('save_about');
-    Route::get('hospital_orders','OrdersController@hospital_orders')->name('hospital_orders');
-    Route::get('modify_blood_spec','BloodController@modify_amounts_spec')->name('modify_blood_spec');
 });
 

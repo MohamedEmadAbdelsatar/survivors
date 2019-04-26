@@ -8,7 +8,7 @@
     <div class="d-flex align-items-center">
         <div class="mr-auto">
             <h3 class="m-subheader__title m-subheader__title--separator">
-                Home
+                Orders
             </h3>
             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                 <li class="m-nav__item m-nav__item--home">
@@ -20,7 +20,7 @@
                     -
                 </li>
                 <li class="m-nav__item">
-                <a href="@if(Auth::user()->role_id == 2) {{"/hospital_orders"}} @else {{"/pending_orders"}} @endif" class="m-nav__link">
+                <a href="@if(Auth::user()->role_id == 2) {{route('hospital/orders')}} @else {{route('orders/pending')}} @endif" class="m-nav__link">
                         <span class="m-nav__link-text">
                             Orders
                         </span>
@@ -77,14 +77,23 @@
                             @case(1) <span class="m-badge m-badge--brand m-badge--wide">Pending</span> @break
                             @case(2) <span class="m-badge  m-badge--success m-badge--wide">Accepted</span> @break
                             @case(3) <span class="m-badge  m-badge--danger m-badge--wide">Refused</span> @break
-                            @endswitch</p></div>
+                            @endswitch</p>
+                        </div>
+                        @if($order->status == 2 && Auth::user()->hospital_id == $order->hospital_id)
+                        <div class="col-md-6"><p> Price: {{$order->price}} </p></div>
+                        @endif
+                    </div>
+                    <div class="row">
                         <div class="col-md-6"><button type="button" class="btn btn-secondary active m-btn m-btn--custom">
                             Follow Order
                         </button>*(Future Plan)</div>
                     </div>
+                    @if(Auth::user()->hospital_id == $order->to_id)
                     <div class="row">
-                        <center><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></center>
+                        <center><input type="number" class="form-control m-input" placeholder="Enter Price" name="price"><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></center>
                     </div>
+                    @endif
+                <input type="hidden" name="order_id" value="{{$order->id}}">
             </div>
     </div>
 
@@ -94,26 +103,34 @@
 <script>
     $(document).ready(function(){
         $('.accept').click(function(){
-            var id = $(this).parent().parent().attr('id');
+            var id = $('input[name=order_id]').val();
             var token = $('input[name="_token"]').val();
-            $.ajax({
-                url:'/pending_action',
-                method:'post',
-                data:{
-                    id:id,
-                    _token:token,
-                    action:'accept'
-                },
-                success:function(response){
-                    $(this).parent().remove()
-                }
-            });
+            var price = $('input[name="price"]').val();
+
+            if(price ==""){
+                alert('You Should Enter The price ')
+            } else {
+                var token = $('input[name="_token"]').val();
+                $.ajax({
+                    url:'/orders/action',
+                    method:'post',
+                    data:{
+                        id:id,
+                        _token:token,
+                        action:'accept',
+                        price:price
+                    },
+                    success:function(response){
+                        $('tr#'+id).remove()
+                    }
+                });
+            }
         });
         $('.refuse').click(function(){
-            var id = $(this).parent().parent().attr('id');
+            var id = $('input[name=order_id]').val();
             var token = $('input[name="_token"]').val();
             $.ajax({
-                url:'/pending_action',
+                url:'/orders/action',
                 method:'post',
                 data:{
                     id:id,
@@ -125,10 +142,7 @@
                 }
             });
         });
-        $(document).ajaxStart(function () {
-        $("#loading").show();
-        }).ajaxStop(function () {
-        $("#loading").hide();
+
     });
     });
 </script>

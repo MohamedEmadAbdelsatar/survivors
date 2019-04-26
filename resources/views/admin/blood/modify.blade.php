@@ -10,7 +10,7 @@
     <div class="d-flex align-items-center">
         <div class="mr-auto">
             <h3 class="m-subheader__title m-subheader__title--separator">
-                Admins
+                Blood
             </h3>
             <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
                 <li class="m-nav__item m-nav__item--home">
@@ -22,7 +22,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                    <a href="{{route('modify_blood')}}" class="m-nav__link">
+                    <a href="{{route('blood/modify')}}" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 Modify Blood Balances
                             </span>
@@ -46,7 +46,7 @@
             </div>
         </div>
         <!--begin::Form-->
-    <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('store_mod')}}" method="POST" >
+    <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('blood/update')}}" method="POST" >
             {{ csrf_field()}}
             <div class="m-portlet__body">
             <div class="row">

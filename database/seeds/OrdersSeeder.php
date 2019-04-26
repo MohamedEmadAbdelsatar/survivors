@@ -17,6 +17,9 @@ class OrdersSeeder extends Seeder
             'blood_type' => '1',
             'amount' => '5',
             'status' => '1',
+            'to_id' => '2',
+            'try' => '1',
+            'price' => ''
         ]);
     }
 }

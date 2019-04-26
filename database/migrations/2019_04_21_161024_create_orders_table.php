@@ -20,6 +20,9 @@ class CreateOrdersTable extends Migration
             $table->integer('amount');
             $table->integer('blood_type');
             $table->integer('status');
+            $table->bigInteger('to_id');
+            $table->integer('try');
+            $table->integer('price')->nullable();
             $table->timestamps();
         });
     }

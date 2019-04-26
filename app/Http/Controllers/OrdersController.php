@@ -83,6 +83,7 @@ class OrdersController extends Controller
         $order->user_id = $user_id;
         $order->to_id = $to_id;
         $order->status = 1;
+        $order->try = 1;
         $order->save();
         $blood_type = null;
         switch($order->blood_type){
@@ -176,12 +177,11 @@ class OrdersController extends Controller
             $hospitals = Hospital::all();
         } else {
             $hospital = Hospital::find($user->hospital_id);
-            $orders = Orders::where(['status'=>1],['to_id'=>$hospital->id])->get();
+            $orders = Orders::where('status',1)
+                                ->where('to_id',$hospital->id)->get();
             $users = User::all();
             $hospitals = Hospital::all();
         }
-
-
         return view('admin.orders.pending',compact('orders','users','hospitals','notifications'));
     }
 
@@ -208,6 +208,7 @@ class OrdersController extends Controller
         }
         if($request->action == 'accept'){
             $order->status = 2;
+            $order->price = $request->price;
             $balance = Blood::where('hospital_id',$hospital_id)->first();
             switch($order->blood_type){
                 case 1: $balance->o_pos += $order->amount; $check_balance->o_pos -= $order->amount; break;
@@ -229,14 +230,54 @@ class OrdersController extends Controller
                 'order_id' =>$order->id
             ];
         } else {
-            $order->status = 3;
-            $details = [
-                'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
-                'body' => 'sorry, '.$sender_hospital->name.' we refused your order',
-                'thanks' => 'Thank you for using survivors.com ',
-                'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
-                'order_id' =>$order->id
-            ];
+            if($order->try == 1){
+                $order->try = 2;
+                $hospitals = Hospital::where('id','!=',$receiver_hospital->id)->get();
+                $distances = array();
+                foreach($hospitals as $hospital){
+                    $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
+                    array_push($distances, $d);
+                }
+                sort($distances);
+                $secondlowest = $distances[1];
+                foreach($hospitals as $hospital){
+                    $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
+                    if($d == $secondlowest) {
+                        $to_id = $hospital->id;
+                        break;
+                    }
+                }
+                $order->to_id = $to_id;
+                $dest_hospital = Hospital::find($to_id);
+                $blood_type = null;
+                switch($order->blood_type){
+                    case 1: $blood_type = "O+"; break;
+                    case 3: $blood_type = "A+"; break;
+                    case 4: $blood_type = "A-"; break;
+                    case 5: $blood_type = "B+"; break;
+                    case 6: $blood_type = "B-"; break;
+                    case 7: $blood_type = "AB+"; break;
+                    case 8: $blood_type = "AB-"; break;
+                }
+                $details = [
+                    'greeting' => 'Hi '.$dest_hospital->name."Admin",
+                    'body' => $receiver_hospital->name.' orderd '.$amount.' of '.$blood_type,
+                    'thanks' => 'Thank you for using survivors.com ',
+                    'notification_body' => $receiver_hospital->name.' orderd '.$amount.' of '.$blood_type
+                ];
+                $receivers = User::where('hospital_id',$to_id)->get();
+                Notification::send($receivers, new ChangeStatus($details));
+            } else {
+                $order->status = 3;
+                $details = [
+                    'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
+                    'body' => 'sorry, '.$sender_hospital->name.' we refused your order',
+                    'thanks' => 'Thank you for using survivors.com ',
+                    'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
+                    'order_id' =>$order->id
+                ];
+            }
+
         }
         $order->save();
         Notification::send($user, new ChangeStatus($details));

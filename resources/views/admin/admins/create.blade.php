@@ -88,16 +88,16 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
+                <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                     <label>
                         Choose Role
                     </label>
                     <select class="form-control m-input m-input--square" id="role">
-                        <option id="1" value="1">Super Admin</option>
+                        <option id="1" value="1">Admin</option>
                         <option id="2" vlaue="2">Hospital Admin</option>
                     </select>
                 </div>
-                <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
+                <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                     <label>
                         Choose Hospital
                     </label>
