@@ -14,5 +14,8 @@ class BloodSeeder extends Seeder
         \App\Blood::firstOrCreate([
             'hospital_id' => '1',
         ]);
+        \App\Blood::firstOrCreate([
+            'hospital_id' => '2',
+        ]);
     }
 }

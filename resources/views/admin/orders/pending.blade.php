@@ -1,6 +1,13 @@
 @extends('admin/layouts.master')
 @section('title','Dashboard')
 @section('pageTitle','Dashboard')
+@section('styles')
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+@endsection
 @section('content')
 
 <div class="m-subheader ">
@@ -70,7 +77,6 @@
                 <th data-field="User" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 80px;">User</span></th>
                 <th data-field="Blood Type" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Blood Type</span></th>
                 <th data-field="Amount" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">Amount</span></th>
-                <th data-field="price" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 170px;">Price</span></th>
                 <th data-field="Actions" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Actions</span></th>
             </thead>
             {{csrf_field()}}
@@ -91,18 +97,41 @@
                     @case(8) {{"AB-"}} @break
                     @endswitch</span></td>
                 <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
-                <td data-field="Price" class="m-datatable__cell"><span style="width: 170px;"><input type="number" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Price" name="price"></span></td>
-                <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></td>
+                <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button><button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;">Refuse</button></td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
-
+<input type="hidden" name="buffer">
         <!--end: Datatable -->
     </div>
 </div>
+  <div class="modal" id="myModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Accept The order</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <label>Enter The price</label>
+            <input type="number" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Price" name="price">
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success submitmod" style="margin-right:5px;margin-left:5px;float:left;" onclick="sendaccept();" data-dismiss="modal">Submit</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 
 
@@ -111,10 +140,35 @@
 <script src="{{asset('default/assets/demo/default/custom/components/datatables/base/data-local.js')}}" type="text/javascript"></script>
 <script sec="{{asset('default/assets/jquery-3.4.0.min.js')}}"></script>
 <script>
+    function sendaccept(){
+        console.log('clicked')
+        var id = $('input[name=buffer]').val()
+        console.log(id)
+        var price = $('input[name=price]').val()
+        console.log(price)
+        var token = $('input[name="_token"]').val();
+        $.ajax({
+            url:'/orders/action',
+            method:'post',
+            data:{
+                id:id,
+                _token:token,
+                action:'accept',
+                price:price
+            },
+                success:function(response){
+                    $('tr#'+id).remove()
+            }
+        });
+    }
     $(document).ready(function(){
+
         $('.accept').click(function(){
+
             var id = $(this).parent().parent().attr('id');
-            var price = $(this).parent().parent().find('input[name=price]').val();
+            var f = $('input[name=buffer]').val(id);
+            console.log(f)
+            /*var price = $(this).parent().parent().find('input[name=price]').val();
             if(price ==""){
                 alert('You Should Enter The price ')
             } else {
@@ -133,7 +187,7 @@
                     }
                 });
             }
-
+*/
         });
         $('.refuse').click(function(){
             var id = $(this).parent().parent().attr('id');

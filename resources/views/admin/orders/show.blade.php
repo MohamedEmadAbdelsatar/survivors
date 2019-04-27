@@ -90,23 +90,73 @@
                     </div>
                     @if(Auth::user()->hospital_id == $order->to_id)
                     <div class="row">
-                        <center><input type="number" class="form-control m-input" placeholder="Enter Price" name="price"><button type="button" class="btn btn-success accept">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></center>
+                        <center><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></center>
                     </div>
                     @endif
                 <input type="hidden" name="order_id" value="{{$order->id}}">
             </div>
     </div>
+    <input type="hidden" name="buffer">
+    <div class="modal" id="myModal">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Accept The order</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <label>Enter The price</label>
+                    <input type="number" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Price" name="price">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success submitmod" style="margin-right:5px;margin-left:5px;float:left;" onclick="sendaccept();" data-dismiss="modal">Submit</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
 
 @endsection
 @section('scripts')
 <script sec="{{asset('default/assets/jquery-3.4.0.min.js')}}"></script>
 <script>
+    function sendaccept(){
+        console.log('clicked')
+        var id = $('input[name=buffer]').val()
+        console.log(id)
+        var price = $('input[name=price]').val()
+        console.log(price)
+        var token = $('input[name="_token"]').val();
+        $.ajax({
+            url:'/orders/action',
+            method:'post',
+            data:{
+                id:id,
+                _token:token,
+                action:'accept',
+                price:price
+            },
+                success:function(response){
+                    $('tr#'+id).remove()
+            }
+        });
+    }
     $(document).ready(function(){
-        $('.accept').click(function(){
-            var id = $('input[name=order_id]').val();
-            var token = $('input[name="_token"]').val();
-            var price = $('input[name="price"]').val();
 
+        $('.accept').click(function(){
+
+            var id = $(this).parent().parent().attr('id');
+            var f = $('input[name=buffer]').val(id);
+            console.log(f)
+            /*var price = $(this).parent().parent().find('input[name=price]').val();
             if(price ==""){
                 alert('You Should Enter The price ')
             } else {
@@ -125,6 +175,7 @@
                     }
                 });
             }
+*/
         });
         $('.refuse').click(function(){
             var id = $('input[name=order_id]').val();

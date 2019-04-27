@@ -19,7 +19,15 @@ class OrdersSeeder extends Seeder
             'status' => '1',
             'to_id' => '2',
             'try' => '1',
-            'price' => ''
+        ]);
+        \App\Orders::firstOrCreate([
+            'hospital_id' => '2',
+            'user_id' => '3',
+            'blood_type' => '2',
+            'amount' => '3',
+            'status' => '1',
+            'to_id' => '1',
+            'try' => '1',
         ]);
     }
 }
