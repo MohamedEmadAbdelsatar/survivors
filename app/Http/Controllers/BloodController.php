@@ -26,8 +26,9 @@ class BloodController extends Controller
     }
 
     public function store_mod(Request $request){
+        return $request->all();
         $user = Auth::user();
-        $hospital_id = $user->hospital_id;
+        $hospital_id = $request->hospital_id;
         $balance = Blood::where('hospital_id',$hospital_id)->first();
         $balance->o_pos = $request->o_pos;
         $balance->o_neg = $request->o_neg;

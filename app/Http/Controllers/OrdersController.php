@@ -197,8 +197,8 @@ class OrdersController extends Controller
         $user = User::find($order->user_id);
         $hospital_id = $user->hospital_id;
         $receiver_hospital = hospital::find($hospital_id);
-        $sender_hospital = Hospital::find(Auth::user()->hospital_id);
-        $check_balance = Blood::where('hospital_id',$sender_hospital)->get();
+        $sender_hospital = Hospital::find($order->to_id);
+        $check_balance = Blood::where('hospital_id',$sender_hospital->id)->first();
         $f = true;
         switch($order->blood_type){
             case 1: if($check_balance->o_pos <= $order->amount){$f = false;}; break;
@@ -210,8 +210,8 @@ class OrdersController extends Controller
             case 7: if($check_balance->ab_pos <= $order->amount){$f = false;}; break;
             case 8: if($check_balance->ab_neg <= $order->amount){$f = false;}; break;
         }
-        if(!f){
-            return redirect()->back()->withErrors('there is no available blood bags');
+        if(!$f){
+            return 'there is no available blood bags';
         }
         if($request->action == 'accept'){
             $order->status = 2;
@@ -236,44 +236,61 @@ class OrdersController extends Controller
                 'notification_body' => $sender_hospital->name.' accepted your order',
                 'order_id' =>$order->id
             ];
+            Notification::send($user, new ChangeStatus($details));
         } else {
             if($order->try == 1){
                 $order->try = 2;
-                $hospitals = Hospital::where('id','!=',$receiver_hospital->id)->get();
-                $distances = array();
-                foreach($hospitals as $hospital){
-                    $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
-                    array_push($distances, $d);
-                }
-                sort($distances);
-                $secondlowest = $distances[1];
-                foreach($hospitals as $hospital){
-                    $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
-                    if($d == $secondlowest) {
-                        $to_id = $hospital->id;
-                        break;
+                $hospitals = Hospital::where('id','!=',$receiver_hospital->id)
+                                        ->where('id','!=',$sender_hospital->id)->get();
+                if(count($hospitals)){
+                    $distances = array();
+                    foreach($hospitals as $hospital){
+                        $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
+                        array_push($distances, $d);
                     }
+                    sort($distances);
+                    $secondlowest = $distances[1];
+                    foreach($hospitals as $hospital){
+                        $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
+                        if($d == $secondlowest) {
+                            $to_id = $hospital->id;
+                            break;
+                        }
+                    }
+                    $order->comment = $request->comment;
+                    $order->to_id = $to_id;
+                    $dest_hospital = Hospital::find($to_id);
+                    $blood_type = null;
+                    switch($order->blood_type){
+                        case 1: $blood_type = "O+"; break;
+                        case 3: $blood_type = "A+"; break;
+                        case 4: $blood_type = "A-"; break;
+                        case 5: $blood_type = "B+"; break;
+                        case 6: $blood_type = "B-"; break;
+                        case 7: $blood_type = "AB+"; break;
+                        case 8: $blood_type = "AB-"; break;
+                    }
+                    $details = [
+                        'greeting' => 'Hi '.$dest_hospital->name."Admin",
+                        'body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
+                        'thanks' => 'Thank you for using survivors.com ',
+                        'notification_body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type
+                    ];
+                    $receivers = User::where('hospital_id',$to_id)->get();
+                    Notification::send($receivers, new ChangeStatus($details));
+                } else {
+                    $order->status = 3;
+                    $details = [
+                        'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
+                        'body' => 'sorry, '.$sender_hospital->name.' we refused your order',
+                        'thanks' => 'Thank you for using survivors.com ',
+                        'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
+                        'order_id' =>$order->id
+                    ];
+                    $order->status = 3;
+                    $order->comment = $request->comment;
+                    Notification::send($user, new ChangeStatus($details));
                 }
-                $order->to_id = $to_id;
-                $dest_hospital = Hospital::find($to_id);
-                $blood_type = null;
-                switch($order->blood_type){
-                    case 1: $blood_type = "O+"; break;
-                    case 3: $blood_type = "A+"; break;
-                    case 4: $blood_type = "A-"; break;
-                    case 5: $blood_type = "B+"; break;
-                    case 6: $blood_type = "B-"; break;
-                    case 7: $blood_type = "AB+"; break;
-                    case 8: $blood_type = "AB-"; break;
-                }
-                $details = [
-                    'greeting' => 'Hi '.$dest_hospital->name."Admin",
-                    'body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
-                    'thanks' => 'Thank you for using survivors.com ',
-                    'notification_body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type
-                ];
-                $receivers = User::where('hospital_id',$to_id)->get();
-                Notification::send($receivers, new ChangeStatus($details));
             } else {
                 $order->status = 3;
                 $details = [
@@ -283,11 +300,12 @@ class OrdersController extends Controller
                     'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                     'order_id' =>$order->id
                 ];
+                Notification::send($user, new ChangeStatus($details));
             }
 
         }
         $order->save();
-        Notification::send($user, new ChangeStatus($details));
+
         return 'ok';
     }
     public function hospital_orders(){
@@ -297,5 +315,44 @@ class OrdersController extends Controller
         $orders = Orders::where('hospital_id',$user->hospital_id)->get();
         $admins = User::where('hospital_id',$user->hospital_id)->get();
         return view('admin.orders.hospital_orders',compact('notifications','hospital','orders','admins'));
+    }
+
+    public function show_accepted(){
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        if($user->role_id == 1){
+            $orders = Orders::where('status',2)->get();
+            $hospitals = Hospital::all();
+            $users = User::all();
+            $role = 1;
+            return view('admin.orders.accepted',compact('notification','orders','hospitals','users','role'));
+        } else {
+            $orders = Orders::where('status',2)
+                                ->where('hospital_id',$user->hospital_id)->get();
+            $hospital = Hospital::find($user->hospital_id);
+            $users = User::where('hospital_id',$user->hospital_id)->get();
+            $role = 2;
+            return view('admin.orders.accepted',compact('notification','orders','hospital','users','role'));
+        }
+
+    }
+
+    public function show_refused(){
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        if($user->role_id == 1){
+            $orders = Orders::where('status',3)->get();
+            $hospitals = Hospital::all();
+            $users = User::all();
+            $role = 1;
+            return view('admin.orders.refused',compact('notification','orders','hospitals','users','role'));
+        } else {
+            $orders = Orders::where('status',3)
+                                ->where('hospital_id',$user->hospital_id)->get();
+            $hospital = Hospital::find($user->hospital_id);
+            $users = User::where('hospital_id',$user->hospital_id)->get();
+            $role = 2;
+            return view('admin.orders.refused',compact('notification','orders','hospital','users','role'));
+        }
     }
 }

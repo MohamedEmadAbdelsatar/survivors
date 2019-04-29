@@ -23,6 +23,7 @@ class CreateOrdersTable extends Migration
             $table->bigInteger('to_id')->nullable();
             $table->integer('try');
             $table->integer('price')->nullable();
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

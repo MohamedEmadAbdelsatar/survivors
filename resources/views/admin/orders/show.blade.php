@@ -89,8 +89,8 @@
                         </button>*(Future Plan)</div>
                     </div>
                     @if(Auth::user()->hospital_id == $order->to_id)
-                    <div class="row">
-                        <center><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button> <button type="button" class="btn btn-danger refuse">Refuse</button></center>
+                    <div class="row" id="to_del">
+                        <center><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button> <button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;" data-toggle="modal" data-target="#myModal2">Refuse</button></center>
                     </div>
                     @endif
                 <input type="hidden" name="order_id" value="{{$order->id}}">
@@ -122,7 +122,31 @@
               </div>
             </div>
           </div>
+          <div class="modal" id="myModal2">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
 
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Accept The order</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <label>Enter Your comment</label>
+                    <input type="text" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Your Comment" name="comment">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success submitmod" style="margin-right:5px;margin-left:5px;float:left;" onclick="sendrefuse();" data-dismiss="modal">Submit</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
 
 @endsection
 @section('scripts')
@@ -145,10 +169,36 @@
                 price:price
             },
                 success:function(response){
-                    $('tr#'+id).remove()
+                    if(response != 'ok') {
+                        console.log(response)
+                    } else{
+                        $('#to_del').remove()
+                    }
+
             }
         });
     }
+    function sendrefuse(){
+            console.log('clicked')
+            var id = $('input[name=buffer]').val()
+            console.log(id)
+            var comment = $('input[name=comment]').val()
+            console.log(comment)
+            var token = $('input[name="_token"]').val();
+            $.ajax({
+                url:'/orders/action',
+                method:'post',
+                data:{
+                    id:id,
+                    _token:token,
+                    comment:comment,
+                    action:'refuse'
+                },
+                success:function(response){
+                    $('#to_del').remove()
+                }
+            });
+        }
     $(document).ready(function(){
 
         $('.accept').click(function(){
@@ -178,7 +228,10 @@
 */
         });
         $('.refuse').click(function(){
-            var id = $('input[name=order_id]').val();
+            var id = $(this).parent().parent().attr('id');
+            var f = $('input[name=buffer]').val(id);
+            console.log(f)
+            /*
             var token = $('input[name="_token"]').val();
             $.ajax({
                 url:'/orders/action',
@@ -192,6 +245,7 @@
                     $(this).parent().remove()
                 }
             });
+            */
         });
 
     });

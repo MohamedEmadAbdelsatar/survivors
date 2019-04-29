@@ -67,7 +67,7 @@ class AdminController extends Controller
         $admin->phone = $request->phone;
         $admin->role_id = $request->role;
         if($admin->role != 1){
-            $admin->hospital_id = $request->hospital_id;
+            $admin->hospital_id = $request->hospital;
         }
         $admin->save();
         return redirect('/admins')->withSuccess('Admin Created Successfully');
@@ -138,7 +138,7 @@ class AdminController extends Controller
         $admin->phone = $request->phone;
         $admin->role_id = $request->role;
         if($admin->role != 1){
-            $admin->hospital_id = $request->hospital_id;
+            $admin->hospital_id = $request->hospital;
         }
         $admin->save();
         return redirect('/home')->withSuccess('Admin Information Updated Successfully');

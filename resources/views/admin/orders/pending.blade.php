@@ -97,7 +97,7 @@
                     @case(8) {{"AB-"}} @break
                     @endswitch</span></td>
                 <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
-                <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button><button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;">Refuse</button></td>
+                <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button><button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;" data-toggle="modal" data-target="#myModal2">Refuse</button></td>
             </tr>
             @endforeach
         </tbody>
@@ -132,6 +132,31 @@
       </div>
     </div>
   </div>
+  <div class="modal" id="myModal2">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Accept The order</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <label>Enter Your comment</label>
+            <input type="text" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Your Comment" name="comment">
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success submitmod" style="margin-right:5px;margin-left:5px;float:left;" onclick="sendrefuse();" data-dismiss="modal">Submit</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 
 
@@ -147,20 +172,50 @@
         var price = $('input[name=price]').val()
         console.log(price)
         var token = $('input[name="_token"]').val();
-        $.ajax({
-            url:'/orders/action',
-            method:'post',
-            data:{
-                id:id,
-                _token:token,
-                action:'accept',
-                price:price
-            },
+        if(price == ""){
+            alert('You Should Enter the price ')
+        } else {
+            $.ajax({
+                url:'/orders/action',
+                method:'post',
+                data:{
+                    id:id,
+                    _token:token,
+                    action:'accept',
+                    price:price
+                },
+                    success:function(response){
+                        if($response != 'ok'){
+                            alert($response )
+                        } else {
+                            $('tr#'+id).remove()
+                        }
+
+                }
+            });
+        }
+    }
+    function sendrefuse(){
+            console.log('clicked')
+            var id = $('input[name=buffer]').val()
+            console.log(id)
+            var comment = $('input[name=comment]').val()
+            console.log(comment)
+            var token = $('input[name="_token"]').val();
+            $.ajax({
+                url:'/orders/action',
+                method:'post',
+                data:{
+                    id:id,
+                    _token:token,
+                    comment:comment,
+                    action:'refuse'
+                },
                 success:function(response){
                     $('tr#'+id).remove()
-            }
-        });
-    }
+                }
+            });
+        }
     $(document).ready(function(){
 
         $('.accept').click(function(){
@@ -191,6 +246,9 @@
         });
         $('.refuse').click(function(){
             var id = $(this).parent().parent().attr('id');
+            var f = $('input[name=buffer]').val(id);
+            console.log(f)
+            /*
             var token = $('input[name="_token"]').val();
             $.ajax({
                 url:'/orders/action',
@@ -204,7 +262,9 @@
                     $('tr#'+id).remove()
                 }
             });
+            */
         });
+
     });
 </script>
 @endsection

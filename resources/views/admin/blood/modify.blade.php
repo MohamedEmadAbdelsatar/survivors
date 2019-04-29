@@ -63,6 +63,7 @@
                     <input type="number" class="form-control m-input" id="o-" value="{{$balance->o_neg}}" name="o_neg">
                 </div>
             </div>
+        <input type="hidden" name="hospital_id" value="{{$hospital->id}}">
             <div class="row">
                 <div class="form-group m-form__group col-md-6"style="padding-top:0px;">
                     <label>

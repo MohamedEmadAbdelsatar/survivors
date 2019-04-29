@@ -92,16 +92,16 @@
                     <label>
                         Choose Role
                     </label>
-                    <select class="form-control m-input m-input--square" id="role">
+                    <select class="form-control m-input m-input--square" id="role" name="role">
                         <option id="1" value="1">Admin</option>
                         <option id="2" vlaue="2">Hospital Admin</option>
                     </select>
                 </div>
-                <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
+                <div class="form-group m-form__group col-md-6 hospital" style="padding-top:0px; display:none;">
                     <label>
                         Choose Hospital
                     </label>
-                    <select class="form-control m-input m-input--square" id="role" name="role">
+                    <select class="form-control m-input m-input--square" id="hospital_id" name="hospital">
                         <option></option>
                         @foreach ($hospitals as $hospital)
                     <option id="{{$hospital->id}}" value="{{$hospital->id}}">{{$hospital->name}}</option>
@@ -120,4 +120,19 @@
         </form>
         <!--end::Form-->
     </div>
+
+@endsection
+@section('scripts')
+<script sec="{{asset('default/assets/jquery-3.4.0.min.js')}}"></script>
+<script>
+$(document).ready(function(){
+    $('#role').change(function(){
+        if($(this).val() == "1"){
+            $('.hospital').hide()
+        } else {
+            $('.hospital').show()
+        }
+    })
+});
+</script>
 @endsection

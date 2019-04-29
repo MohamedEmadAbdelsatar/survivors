@@ -88,20 +88,24 @@
                 </div>
             </div>
             <div class="row">
+                @if(Auth::user()->id != $admin->id)
+                @if(Auth::user()->role_id == 1)
                 <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                     <label>
                         Choose Role
                     </label>
-                    <select class="form-control m-input m-input--square" id="role">
+                    <select class="form-control m-input m-input--square" id="role" name="role">
                         <option id="1" value="1" @if($admin->role_id == 1) selected @endif>Admin</option>
                         <option id="2" vlaue="2" @if($admin->role_id == 2) selected @endif>Hospital Admin</option>
                     </select>
                 </div>
-                <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
+                @endif
+                @endif
+                <div class="form-group m-form__group col-md-6 hospital" @if($admin->role_id == 1) style="display:none;padding:0px;" @endif>
                     <label>
                         Choose Hospital
                     </label>
-                    <select class="form-control m-input m-input--square" id="role" name="role">
+                    <select class="form-control m-input m-input--square" id="hospital" name="hospital">
                         <option></option>
                         @foreach ($hospitals as $hospital)
                     <option id="{{$hospital->id}}" value="{{$hospital->id}}" @if($admin->hospital_id == $hospital->id) selected @endif>{{$hospital->name}}</option>
@@ -120,4 +124,18 @@
         </form>
         <!--end::Form-->
     </div>
+@endsection
+@section('scripts')
+<script sec="{{asset('default/assets/jquery-3.4.0.min.js')}}"></script>
+<script>
+$(document).ready(function(){
+    $('#role').change(function(){
+        if($(this).val() == "1"){
+            $('.hospital').hide()
+        } else {
+            $('.hospital').show()
+        }
+    })
+});
+</script>
 @endsection
