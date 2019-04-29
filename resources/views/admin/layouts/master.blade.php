@@ -318,6 +318,26 @@
 												</span>
 											</a>
                                         </li>
+                                        <li class="m-menu__item " aria-haspopup="true">
+                                            <a href="{{route('orders/accepted')}}" class="m-menu__link ">
+                                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                        <span></span>
+                                                    </i>
+                                                    <span class="m-menu__link-text">
+                                                        Accepted Orders
+                                                    </span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " aria-haspopup="true">
+                                                <a href="{{route('orders/refused')}}" class="m-menu__link ">
+                                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                            <span></span>
+                                                        </i>
+                                                        <span class="m-menu__link-text">
+                                                            Refused Orders
+                                                        </span>
+                                                    </a>
+                                                </li>
                                         @if(Auth::user()->role_id == 2)
                                         <li class="m-menu__item " aria-haspopup="true">
                                             <a href="{{route('hospital/orders')}}" class="m-menu__link ">
