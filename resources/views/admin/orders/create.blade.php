@@ -55,31 +55,44 @@
         <!--begin::Form-->
     <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('orders.store')}}" method="POST" >
             {{ csrf_field()}}
-            <div class="m-portlet__body">
+        <div class="m-portlet__body">
             <div class="row">
                 <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
                         <label>
                             Choose Blood Type
                         </label>
-                <select class="form-control m-input m-input--square" id="blood_type" name="blood_type">
-                    <option id="1" value="1">O+</option>
-                    <option id="2" value="2">O-</option>
-                    <option id="3" value="3">A+</option>
-                    <option id="4" value="4">A-</option>
-                    <option id="5" value="5">B+</option>
-                    <option id="6" value="6">B-</option>
-                    <option id="7" value="7">AB+</option>
-                    <option id="8" value="8">AB-</option>
-                </select>
+                    <select class="form-control m-input m-input--square" id="blood_type" name="blood_type">
+                        <option id="1" value="1">O+</option>
+                        <option id="2" value="2">O-</option>
+                        <option id="3" value="3">A+</option>
+                        <option id="4" value="4">A-</option>
+                        <option id="5" value="5">B+</option>
+                        <option id="6" value="6">B-</option>
+                        <option id="7" value="7">AB+</option>
+                        <option id="8" value="8">AB-</option>
+                    </select>
                 </div>
-                <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
+                <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
                     <label>
                         Amount
                     </label>
                     <input type="number" class="form-control m-input" id="amounr" placeholder="Enter Amount" name="amount">
                 </div>
+                <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
+                    <label>
+                        Choose Hospitals To order from
+                    </label>
+                    <select class="form-control m-input m-input--square" id="to_id" name="to_id">
+                        <option id="0" value="0"></option>
+                        @foreach($hospitals as $hospital)
+                        @if($hospital->id != Auth::user()->hospital_id)
+                        <option id="{{$hospital->id}}" value="{{$hospital->id}}">{{$hospital->name}}</option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
             </div>
-            </div>
+        </div>
             <div class="m-portlet__foot m-portlet__foot--fit">
                 <div class="m-form__actions">
                         <button type="submit" class="btn btn-primary">

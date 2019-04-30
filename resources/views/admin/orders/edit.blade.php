@@ -72,12 +72,27 @@
                     <option id="8" value="8" @if($order->blood_type == 8) selected @endif>AB-</option>
                 </select>
                 </div>
-                <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
+                <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
                     <label>
                         Amount
                     </label>
                 <input type="number" class="form-control m-input" id="amounr" value="{{$order->amount}}" name="amount">
                 </div>
+                @if($order->direct == 0)
+                <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
+                    <label>
+                        Choose Hospitals To order from
+                    </label>
+                    <select class="form-control m-input m-input--square" id="to_id" name="to_id">
+                        <option id="0" value="0"></option>
+                        @foreach($hospitals as $hospital)
+                        @if($hospital->id != Auth::user()->hospital_id)
+                        <option id="{{$hospital->id}}" value="{{$hospital->id}}" @if($order->to_id == $hospital->id) selected @endif>{{$hospital->name}}</option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
+                @endif
             </div>
             </div>
             <div class="m-portlet__foot m-portlet__foot--fit">

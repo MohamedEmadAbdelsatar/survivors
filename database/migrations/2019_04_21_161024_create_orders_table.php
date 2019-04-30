@@ -24,6 +24,7 @@ class CreateOrdersTable extends Migration
             $table->integer('try');
             $table->integer('price')->nullable();
             $table->text('comment')->nullable();
+            $table->integer('direct')->default(0);
             $table->timestamps();
         });
     }
