@@ -27,7 +27,7 @@ class UserSeeder extends Seeder
         ]);
         \App\User::firstOrCreate([
             'name' => 'test3',
-            'email' => 'test3@test.com',
+            'email' => 'medo_emad2011@yahoo.com',
             'password' => bcrypt('123456789'),
             'hospital_id' => '2',
             'role_id' => '2',

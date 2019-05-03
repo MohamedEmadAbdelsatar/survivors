@@ -36,14 +36,14 @@ class OrdersController extends Controller
         return view('admin.orders.create',compact('notifications','hospitals'));
     }
 
-    public function check_destance($lat1, $lng1, $lat2, $lng2){
+    public function check_destance($lat1, $lon1, $lat2, $lon2){
         $R = 6371;
-        $dLat = deg2rad(lat2-lat1);
-        $dLon = deg2rad(lon2-lon1);
-        $a = sin(dLat/2) * sin(dLat/2) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon/2) * sin(dLon/2);
-        $c = 2 * atan2(sqrt(a), sqrt(1-a));
-        $d = R * c; // Distance in km
-        return d;
+        $dLat = deg2rad($lat2-$lat1);
+        $dLon = deg2rad($lon2-$lon1);
+        $a = sin($dLat/2) * sin($dLat/2) + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon/2) * sin($dLon/2);
+        $c = 2 * atan2(sqrt($a), sqrt(1-$a));
+        $d = $R * $c; // Distance in km
+        return $d;
     }
     /**
      * Store a newly created resource in storage.
@@ -66,14 +66,15 @@ class OrdersController extends Controller
         $user = User::find($user_id);
         $hospital_id = $user->hospital_id;
         $current_hospital = Hospital::find($hospital_id);
+        $to_id = null;
         if($request->to_id == 0){
             $other_hospitals = Hospital::where('id','!=',$hospital_id)->get();
-            $distance = 0;
-            $to_id = null;
+            $first_hospital = Hospital::where('id','!=',$hospital_id)->first();
+            $distance = $this->check_destance($current_hospital->lat, $current_hospital->lng, $first_hospital->lat, $first_hospital->lng);
             if(count($other_hospitals) != 0){
                 foreach($other_hospitals as $other){
-                    $new_destance = $this->check_destance($current_hospital->lat, $current_hospital->lng, $other->lat,$other->lng);
-                    if($new_destance < $distance){
+                    $new_destance = $this->check_destance($current_hospital->lat, $current_hospital->lng, $other->lat, $other->lng);
+                    if($new_destance <= $distance){
                         $distance = $new_destance;
                         $to_id = $other->id;
                     }
@@ -96,7 +97,7 @@ class OrdersController extends Controller
         } else {
             $order->direct = 0;
         }
-        $order->save();
+        //$order->save();
         $blood_type = null;
         switch($order->blood_type){
             case 1: $blood_type = "O+"; break;
@@ -110,16 +111,21 @@ class OrdersController extends Controller
 
         $details = [
                 'greeting' => 'Hi,',
-                'body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
+                'body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type.' blood bags',
                 'thanks' => 'Thank you for using survivors.com ',
-                'notification_body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type
+                'notification_body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type.' blood bags',
+                'order_id' =>$order->id
             ];
-
-
-        $receivers = User::where('hospital_id',$to_id)
+        if($request->to_id == 0){
+            $receivers = User::where('hospital_id',$to_id)
                             ->orwhere('role_id',1)->get();
+        } else {
+            $receivers = User::where('hospital_id',$request->to_id)
+                            ->orwhere('role_id',1)->get();
+        }
+
         Notification::send($receivers, new ChangeStatus($details));
-        return redirect('orders')->withSuccess('Orderd is sent');
+        return redirect('/home')->withSuccess('Orderd is sent');
     }
 
     /**
@@ -132,6 +138,11 @@ class OrdersController extends Controller
     {
         $user = Auth::user();
         $notifications = $user->notifications;
+        foreach($notifications as $notification){
+            if($notification->data['order_id'] == $id){
+                $notification->delete();
+            }
+        }
         $order = Orders::find($id);
         $hospital = Hospital::find($user->hospital_id);
         return view('admin.orders.show',compact('notifications','order','hospital'));
@@ -174,7 +185,7 @@ class OrdersController extends Controller
             $order->to_id = $request->to_id;
         }
         $order->save();
-        return redirect('orders')->withSuccess('Orderd updated Successfully');
+        return redirect('/home')->withSuccess('Orderd updated Successfully');
     }
 
     /**
@@ -288,7 +299,8 @@ class OrdersController extends Controller
                             'greeting' => 'Hi '.$dest_hospital->name."Admin",
                             'body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
                             'thanks' => 'Thank you for using survivors.com ',
-                            'notification_body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type
+                            'notification_body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
+                            'order_id' =>$order->id
                         ];
                         $receivers = User::where('hospital_id',$to_id)->get();
                         Notification::send($receivers, new ChangeStatus($details));

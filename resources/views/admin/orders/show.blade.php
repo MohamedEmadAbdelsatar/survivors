@@ -89,8 +89,12 @@
                         </button>*(Future Plan)</div>
                     </div>
                     @if(Auth::user()->hospital_id == $order->to_id)
-                    <div class="row" id="to_del">
-                        <center><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button> <button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;" data-toggle="modal" data-target="#myModal2">Refuse</button></center>
+                    <div class="row" id="to_del" style="margin-top:15px;width:100%;">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4"><center>
+                            <button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button> <button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;" data-toggle="modal" data-target="#myModal2">Refuse</button></center>
+                        </div>
+                        <div class="col-md-4"></div>
                     </div>
                     @endif
                 <input type="hidden" name="order_id" value="{{$order->id}}">
@@ -154,7 +158,7 @@
 <script>
     function sendaccept(){
         console.log('clicked')
-        var id = $('input[name=buffer]').val()
+        var id = $('input[name=order_id]').val()
         console.log(id)
         var price = $('input[name=price]').val()
         console.log(price)
@@ -170,7 +174,7 @@
             },
                 success:function(response){
                     if(response != 'ok') {
-                        console.log(response)
+                        alert(response)
                     } else{
                         $('#to_del').remove()
                     }
@@ -180,7 +184,7 @@
     }
     function sendrefuse(){
             console.log('clicked')
-            var id = $('input[name=buffer]').val()
+            var id = $('input[name=order_id]').val()
             console.log(id)
             var comment = $('input[name=comment]').val()
             console.log(comment)
@@ -249,6 +253,6 @@
         });
 
     });
-    });
+
 </script>
 @endsection

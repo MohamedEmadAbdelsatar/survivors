@@ -186,7 +186,7 @@
                 },
                     success:function(response){
                         if($response != 'ok'){
-                            alert($response )
+                            alert(response )
                         } else {
                             $('tr#'+id).remove()
                         }
