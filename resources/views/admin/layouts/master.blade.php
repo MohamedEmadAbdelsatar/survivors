@@ -130,7 +130,8 @@
                                                         <div class="m-list-timeline__item" style="height:40px;">
                                                             <span class="m-list-timeline__badge -m-list-timeline__badge--state-success"></span>
                                                             <span class="m-list-timeline__text">
-                                                            <a href="/orders/{{$notification->data['order_id']}}">{{$notification->data['notification_body']}}</a>
+
+                                                            <a @if($notification->data['order_id']) href="/orders/{{$notification->data['order_id']}}" @endif>{{$notification->data['notification_body']}}</a>
                                                             </span>
                                                         </div>
                                                         @endforeach
