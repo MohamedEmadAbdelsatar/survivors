@@ -275,7 +275,7 @@
                                     @endif
                                     @if(Auth::user()->role_id == 2)
                                     <li class="m-menu__item " aria-haspopup="true">
-                                            <a href="{{route('blood/modify')}}" class="m-menu__link ">
+                                            <a href="{{route('blood/modify',Auth::user()->hospital_id)}}" class="m-menu__link ">
                                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                                         <span></span>
                                                     </i>

@@ -24,7 +24,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('orders/accepted','OrdersController@show_accepted')->name('orders/accepted');
     Route::get('orders/refused','OrdersController@show_refused')->name('orders/refused');
     Route::post('orders/action','OrdersController@pending_action')->name('orders/action');
-    Route::get('blood/modify','BloodController@modify_amounts')->name('blood/modify');
+    Route::get('blood/modify/{hospital_id}','BloodController@modify_amounts')->name('blood/modify');
     Route::post('blood/update','BloodController@store_mod')->name('blood/update');
     Route::get('about/modify','AboutController@modify')->name('about/modify');
     Route::post('about/update','AboutController@save')->name('about/update');

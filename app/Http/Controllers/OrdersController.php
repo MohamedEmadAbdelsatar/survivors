@@ -97,7 +97,7 @@ class OrdersController extends Controller
         } else {
             $order->direct = 0;
         }
-        //$order->save();
+        $order->save();
         $blood_type = null;
         switch($order->blood_type){
             case 1: $blood_type = "O+"; break;
@@ -221,21 +221,23 @@ class OrdersController extends Controller
         $user = User::find($order->user_id);
         $hospital_id = $user->hospital_id;
         $receiver_hospital = hospital::find($hospital_id);
-        $sender_hospital = Hospital::find($order->to_id);
-        $check_balance = Blood::where('hospital_id',$sender_hospital->id)->first();
-        $f = true;
-        switch($order->blood_type){
-            case 1: if($check_balance->o_pos <= $order->amount){$f = false;}; break;
-            case 2: if($check_balance->o_neg <= $order->amount){$f = false;}; break;
-            case 3: if($check_balance->a_pos <= $order->amount){$f = false;}; break;
-            case 4: if($check_balance->a_neg <= $order->amount){$f = false;}; break;
-            case 5: if($check_balance->b_pos <= $order->amount){$f = false;}; break;
-            case 6: if($check_balance->b_neg <= $order->amount){$f = false;}; break;
-            case 7: if($check_balance->ab_pos <= $order->amount){$f = false;}; break;
-            case 8: if($check_balance->ab_neg <= $order->amount){$f = false;}; break;
-        }
-        if(!$f){
-            return 'there is no available blood bags';
+        if($order->to_id != null){
+            $sender_hospital = Hospital::find($order->to_id);
+            $check_balance = Blood::where('hospital_id',$sender_hospital->id)->first();
+            $f = true;
+            switch($order->blood_type){
+                case 1: if($check_balance->o_pos <= $order->amount){$f = false;}; break;
+                case 2: if($check_balance->o_neg <= $order->amount){$f = false;}; break;
+                case 3: if($check_balance->a_pos <= $order->amount){$f = false;}; break;
+                case 4: if($check_balance->a_neg <= $order->amount){$f = false;}; break;
+                case 5: if($check_balance->b_pos <= $order->amount){$f = false;}; break;
+                case 6: if($check_balance->b_neg <= $order->amount){$f = false;}; break;
+                case 7: if($check_balance->ab_pos <= $order->amount){$f = false;}; break;
+                case 8: if($check_balance->ab_neg <= $order->amount){$f = false;}; break;
+            }
+            if(!$f){
+                return 'there is no available blood bags';
+            }
         }
         if($request->action == 'accept'){
             $order->status = 2;
@@ -362,14 +364,14 @@ class OrdersController extends Controller
             $hospitals = Hospital::all();
             $users = User::all();
             $role = 1;
-            return view('admin.orders.accepted',compact('notification','orders','hospitals','users','role'));
+            return view('admin.orders.accepted',compact('notifications','orders','hospitals','users','role'));
         } else {
             $orders = Orders::where('status',2)
                                 ->where('hospital_id',$user->hospital_id)->get();
             $hospital = Hospital::find($user->hospital_id);
             $users = User::where('hospital_id',$user->hospital_id)->get();
             $role = 2;
-            return view('admin.orders.accepted',compact('notification','orders','hospital','users','role'));
+            return view('admin.orders.accepted',compact('notifications','orders','hospital','users','role'));
         }
 
     }
@@ -382,14 +384,14 @@ class OrdersController extends Controller
             $hospitals = Hospital::all();
             $users = User::all();
             $role = 1;
-            return view('admin.orders.refused',compact('notification','orders','hospitals','users','role'));
+            return view('admin.orders.refused',compact('notifications','orders','hospitals','users','role'));
         } else {
             $orders = Orders::where('status',3)
                                 ->where('hospital_id',$user->hospital_id)->get();
             $hospital = Hospital::find($user->hospital_id);
             $users = User::where('hospital_id',$user->hospital_id)->get();
             $role = 2;
-            return view('admin.orders.refused',compact('notification','orders','hospital','users','role'));
+            return view('admin.orders.refused',compact('notifications','orders','hospital','users','role'));
         }
     }
 }

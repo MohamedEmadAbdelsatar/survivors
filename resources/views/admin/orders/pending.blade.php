@@ -185,8 +185,8 @@
                     price:price
                 },
                     success:function(response){
-                        if($response != 'ok'){
-                            alert(response )
+                        if(response != 'ok'){
+                            console.log(response)
                         } else {
                             $('tr#'+id).remove()
                         }

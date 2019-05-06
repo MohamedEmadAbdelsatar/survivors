@@ -22,7 +22,7 @@
                         -
                     </li>
                     <li class="m-nav__item">
-                    <a href="{{route('blood/modify')}}" class="m-nav__link">
+                    <a href="{{route('blood/modify',$hospital->id)}}" class="m-nav__link">
                             <span class="m-nav__link-text">
                                 Modify Blood Balances
                             </span>
