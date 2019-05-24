@@ -125,7 +125,7 @@ class OrdersController extends Controller
         }
 
         Notification::send($receivers, new ChangeStatus($details));
-        return redirect('/home')->withSuccess('Orderd is sent');
+        return redirect('hospital/orders')->withSuccess('Order is sent');
     }
 
     /**
@@ -185,7 +185,7 @@ class OrdersController extends Controller
             $order->to_id = $request->to_id;
         }
         $order->save();
-        return redirect('/home')->withSuccess('Orderd updated Successfully');
+        return redirect('hospital/orders')->withSuccess('Order Updated');
     }
 
     /**
@@ -196,10 +196,11 @@ class OrdersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Order::where('id',$id)->delete();
+        return redirect('hospital/orders')->withSuccess('Order Deleted Successfully');
     }
 
-    public function show_pending(){
+    public function show_received(){
         $user = Auth::user();
         $notifications = $user->notifications;
         if($user->role_id == 1){
@@ -221,25 +222,26 @@ class OrdersController extends Controller
         $user = User::find($order->user_id);
         $hospital_id = $user->hospital_id;
         $receiver_hospital = hospital::find($hospital_id);
-        if($order->to_id != null){
-            $sender_hospital = Hospital::find($order->to_id);
-            $check_balance = Blood::where('hospital_id',$sender_hospital->id)->first();
-            $f = true;
-            switch($order->blood_type){
-                case 1: if($check_balance->o_pos <= $order->amount){$f = false;}; break;
-                case 2: if($check_balance->o_neg <= $order->amount){$f = false;}; break;
-                case 3: if($check_balance->a_pos <= $order->amount){$f = false;}; break;
-                case 4: if($check_balance->a_neg <= $order->amount){$f = false;}; break;
-                case 5: if($check_balance->b_pos <= $order->amount){$f = false;}; break;
-                case 6: if($check_balance->b_neg <= $order->amount){$f = false;}; break;
-                case 7: if($check_balance->ab_pos <= $order->amount){$f = false;}; break;
-                case 8: if($check_balance->ab_neg <= $order->amount){$f = false;}; break;
-            }
-            if(!$f){
-                return 'there is no available blood bags';
-            }
-        }
+        $sender_hospital = Hospital::find($order->to_id);
         if($request->action == 'accept'){
+            if($order->to_id != null){
+
+                $check_balance = Blood::where('hospital_id',$sender_hospital->id)->first();
+                $f = true;
+                switch($order->blood_type){
+                    case 1: if($check_balance->o_pos <= $order->amount){$f = false;}; break;
+                    case 2: if($check_balance->o_neg <= $order->amount){$f = false;}; break;
+                    case 3: if($check_balance->a_pos <= $order->amount){$f = false;}; break;
+                    case 4: if($check_balance->a_neg <= $order->amount){$f = false;}; break;
+                    case 5: if($check_balance->b_pos <= $order->amount){$f = false;}; break;
+                    case 6: if($check_balance->b_neg <= $order->amount){$f = false;}; break;
+                    case 7: if($check_balance->ab_pos <= $order->amount){$f = false;}; break;
+                    case 8: if($check_balance->ab_neg <= $order->amount){$f = false;}; break;
+                }
+                if(!$f){
+                    return 'there is no available blood bags';
+                }
+            }
             $order->status = 2;
             $order->price = $request->price;
             $balance = Blood::where('hospital_id',$hospital_id)->first();
@@ -276,7 +278,7 @@ class OrdersController extends Controller
                             array_push($distances, $d);
                         }
                         sort($distances);
-                        $secondlowest = $distances[1];
+                        $secondlowest = $distances[0];
                         foreach($hospitals as $hospital){
                             $d = $this->check_destance($receiver_hospital->lat, $receiver_hospital->lng, $hospital->lat, $hospital->lng);
                             if($d == $secondlowest) {
@@ -315,7 +317,6 @@ class OrdersController extends Controller
                             'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                             'order_id' =>$order->id
                         ];
-                        $order->status = 3;
                         $order->comment = $request->comment;
                         Notification::send($user, new ChangeStatus($details));
                     }
@@ -341,10 +342,8 @@ class OrdersController extends Controller
                     ];
                     Notification::send($user, new ChangeStatus($details));
             }
-
         }
         $order->save();
-
         return 'ok';
     }
     public function hospital_orders(){

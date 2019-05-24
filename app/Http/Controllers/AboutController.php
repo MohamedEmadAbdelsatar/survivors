@@ -34,7 +34,7 @@ class AboutController extends Controller
         }
         $about->body = $request->body;
         $about->save();
-        return redirect('/home')->withSuccess('About Us Modified Successfully');
+        return redirect()->back()->withSuccess('About Us Modified Successfully');
 
     }
 }

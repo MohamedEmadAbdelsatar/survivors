@@ -55,6 +55,7 @@
         <!--begin::Form-->
     <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('orders.update',$order->id)}}" method="POST" >
             {{ csrf_field()}}
+            {{method_field('PUT')}}
             <div class="m-portlet__body">
             <div class="row">
                 <div class="form-group m-form__group col-md-4" style="padding-top:0px;">

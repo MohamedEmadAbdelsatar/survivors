@@ -26,9 +26,9 @@
                     -
                 </li>
                 <li class="m-nav__item">
-                <a href="{{route('orders/pending')}}" class="m-nav__link">
+                <a href="{{route('orders/received')}}" class="m-nav__link">
                         <span class="m-nav__link-text">
-                            Pending Orders
+                            Received Orders
                         </span>
                     </a>
                 </li>
@@ -77,6 +77,7 @@
                 <th data-field="User" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 80px;">User</span></th>
                 <th data-field="Blood Type" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Blood Type</span></th>
                 <th data-field="Amount" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">Amount</span></th>
+                <th data-field="To" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">To</span></th>
                 <th data-field="Actions" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Actions</span></th>
             </thead>
             {{csrf_field()}}
@@ -84,9 +85,9 @@
             @foreach($orders as $order)
             <tr data-row="0" class="m-datatable__row" style="height: 64px;" id="{{$order->id}}">
                 <td data-field="ID" class="m-datatable__cell"><span style="width: 50px;">{{$loop->index+1}}</span></td>
-                <td data-field="ShipName" class="m-datatable__cell"><span style="width: 130px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->hospital_id){{$hospital->name}}@endif @endforeach</span></td>
-                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 80px;">@foreach($users as $user) @if($user->id == $order->user_id){{$user->name}}@endif @endforeach</span></td>
-                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 110px;">@switch($order->blood_type)
+                <td data-field="Hospital" class="m-datatable__cell"><span style="width: 130px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->hospital_id){{$hospital->name}}@endif @endforeach</span></td>
+                <td data-field="User" class="m-datatable__cell"><span style="width: 80px;">@foreach($users as $user) @if($user->id == $order->user_id){{$user->name}}@endif @endforeach</span></td>
+                <td data-field="BloodType" class="m-datatable__cell"><span style="width: 110px;">@switch($order->blood_type)
                     @case(1) {{"O+"}} @break
                     @case(2) {{"O-"}} @break
                     @case(3) {{"A+"}} @break
@@ -96,7 +97,8 @@
                     @case(7) {{"AB+"}} @break
                     @case(8) {{"AB-"}} @break
                     @endswitch</span></td>
-                <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
+                <td data-field="Amount" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
+                <td data-field="To" class="m-datatable__cell"><span style="width: 100px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->to_id){{$hospital->name}}@endif @endforeach</span></td>
                 <td data-field="Actions" class="m-datatable__cell"><button type="button" class="btn btn-success accept" data-toggle="modal" data-target="#myModal" style="margin-right:5px;margin-left:5px;">Accept</button><button type="button" class="btn btn-danger refuse" style="margin-right:5px;margin-left:5px;" data-toggle="modal" data-target="#myModal2">Refuse</button></td>
             </tr>
             @endforeach
@@ -138,7 +140,7 @@
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Accept The order</h4>
+          <h4 class="modal-title">Refuse The order</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
 
@@ -157,8 +159,75 @@
       </div>
     </div>
   </div>
+  <div class="modal" id="myModal3">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Order Accepted</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
 
+        <!-- Modal body -->
+        <div class="modal-body">
+            <p>You accepted this order</p>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="myModal4">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Order Refused</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <P>no enough blood bags</P>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="myModal5">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Order Refused</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <p>You refused this order</p>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 @endsection
 @section('scripts')
@@ -186,9 +255,16 @@
                 },
                     success:function(response){
                         if(response != 'ok'){
-                            console.log(response)
+                            $('#myModal3').show();
+                            $('button').click(function(){
+                            $('#myModal3').hide();
+                            })
                         } else {
                             $('tr#'+id).remove()
+                            $('#myModal3').show();
+                            $('button').click(function(){
+                            $('#myModal3').hide();
+                            })
                         }
 
                 }
@@ -212,7 +288,11 @@
                     action:'refuse'
                 },
                 success:function(response){
-                    $('tr#'+id).remove()
+                    $('tr#'+id).remove();
+                    $('#myModal5').show();
+                    $('button').click(function(){
+                        $('#myModal5').hide();
+                    })
                 }
             });
         }

@@ -56,6 +56,7 @@
         <!--begin::Form-->
     <form class="m-form m-form--fit m-form--label-align-right" role="form" action="{{route('hospital.update',$hospital->id)}}" method="POST" >
             {{ csrf_field()}}
+            {{method_field('PUT')}}
             <div class="m-portlet__body">
             <div id="map" style="height:400px;width: 100%;padding-top:0px;margin-bottom:20px;"></div>
             <div class="row">
@@ -77,7 +78,7 @@
                     <label>
                         Email Address
                     </label>
-                <input type="email" class="form-control m-input" id="email" placeholder="Enter Email" name="email" value="{{$hospital->mail}}">
+                <input type="email" class="form-control m-input" id="email" placeholder="Enter Email" name="email" value="{{$hospital->email}}">
                 </div>
                 <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                         <label>
@@ -114,8 +115,11 @@
     </div>
 @endsection
 @section('scripts')
-
+<script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrXPHNArrZmglifJOO-0KgaG0OH-7rDLM&callback=initMap">
+            </script>
 <script>
+
     var a = parseFloat(document.getElementById('lat').value);
     console.log(a)
     var b = parseFloat(document.getElementById('lng').value);
@@ -150,16 +154,13 @@
                 }
             });
 
-});
+            });
+
         }
 
+
             </script>
-            <!--Load the API from the specified URL
-            * The async attribute allows the browser to render the page while the API loads
-            * The key parameter will contain your own API key (which is not needed for this tutorial)
-            * The callback parameter executes the initMap() function
-            -->
-            <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrXPHNArrZmglifJOO-0KgaG0OH-7rDLM&callback=initMap">
-            </script>
+
+
+
 @endsection

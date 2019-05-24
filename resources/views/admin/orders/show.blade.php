@@ -132,7 +132,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                  <h4 class="modal-title">Accept The order</h4>
+                  <h4 class="modal-title">Refuse The order</h4>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
@@ -151,7 +151,75 @@
               </div>
             </div>
           </div>
+          <div class="modal" id="myModal3">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
 
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Order Accepted</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p>You accepted this order</p>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="modal" id="myModal4">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Order Refused</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <P>no enough blood bags</P>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="modal" id="myModal5">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Order Refused</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <p>You refused this order</p>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+
+              </div>
+            </div>
+          </div>
 @endsection
 @section('scripts')
 <script sec="{{asset('default/assets/jquery-3.4.0.min.js')}}"></script>
@@ -173,11 +241,18 @@
                 price:price
             },
                 success:function(response){
-                    if(response != 'ok') {
-                        alert(response)
-                    } else{
-                        $('#to_del').remove()
-                    }
+                    if(response != 'ok'){
+                            $('#myModal3').show();
+                            $('button').click(function(){
+                            $('#myModal3').hide();
+                            })
+                        } else {
+                            $('#to_del').remove()
+                            $('#myModal3').show();
+                            $('button').click(function(){
+                            $('#myModal3').hide();
+                            })
+                        }
 
             }
         });
@@ -200,6 +275,11 @@
                 },
                 success:function(response){
                     $('#to_del').remove()
+                    $('#myModal5').show();
+                    $('button').click(function(){
+                        $('#myModal5').hide();
+                    })
+
                 }
             });
         }

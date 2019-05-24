@@ -19,8 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/home', 'HomeController@index')->name('home');
-
-    Route::get('orders/pending','OrdersController@show_pending')->name('orders/pending');
+    Route::get('orders/received','OrdersController@show_received')->name('orders/received');
     Route::get('orders/accepted','OrdersController@show_accepted')->name('orders/accepted');
     Route::get('orders/refused','OrdersController@show_refused')->name('orders/refused');
     Route::post('orders/action','OrdersController@pending_action')->name('orders/action');

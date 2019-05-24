@@ -8,6 +8,9 @@ use App\User;
 use Auth;
 use App\Blood;
 use App\Orders;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailable;
+
 
 class HospitalController extends Controller
 {
@@ -56,7 +59,8 @@ class HospitalController extends Controller
             'address'=>'required|unique:hospitals',
             'phone'=>'required|max:11|min:11',
             'lat'=>'required|unique:hospitals',
-            'lng'=>'required|unique:hospitals'
+            'lng'=>'required|unique:hospitals',
+            'email'=>'required|unique:hospitals'
         ]);
 
         $hospital = new Hospital;
@@ -70,7 +74,8 @@ class HospitalController extends Controller
         $balance = new Blood;
         $balance->hospital_id = $hospital->id;
         $balance->save();
-        return redirect('/home')->with('success');
+        Mail::to($hospital->email)->send(new SendMailable());
+        return redirect('hospital')->withSuccess('Hospital Created');
     }
 
     /**
@@ -82,6 +87,11 @@ class HospitalController extends Controller
     public function show($id)
     {
         $user = Auth::user();
+        if($user->role_id != 1){
+            if($user->hospital_id != $id){
+                return redirect('/home');
+            }
+        }
         $notifications = $user->notifications;
         $hospital = Hospital::find($id);
         $users = User::where('hospital_id',$id)->get();
@@ -98,6 +108,11 @@ class HospitalController extends Controller
     public function edit($id)
     {
         $user = Auth::user();
+        if($user->role_id != 1){
+            if($user->hospital_id != $id){
+                return redirect('/home');
+            }
+        }
         $notifications = $user->notifications;
         $hospital = Hospital::find($id);
         return view('admin.hospitals.edit',compact('notifications','hospital'));
@@ -128,7 +143,7 @@ class HospitalController extends Controller
         $hospital->lat = $request->lat;
         $hospital->lng = $request->lng;
         $hospital->save();
-        return redirect('/home')->with('success');
+        return redirect('hospital')->withSuccess('Hospital Inforamtion Updated');
     }
 
     /**
@@ -139,6 +154,20 @@ class HospitalController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $orders = Orders::where('hospital_id',$id)->get();
+        if(count($orders) != 0){
+            foreach($orders as $order){
+                Orders::where('id',$order->id)->delete();
+            }
+        }
+        $admins = User::where('hospital_id',$id)->get();
+        if(count($admins) != 0){
+            foreach($admins as $admin){
+                User::where('id',$admin->id)->delete();
+            }
+        }
+        Blood::where('hospital_id',$id)->delete();
+        Hospital::where('id',$id)->delete();
+        return redirect('hospital')->withSuccess('Hospital deleted successfully');
     }
 }

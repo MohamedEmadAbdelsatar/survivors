@@ -94,7 +94,19 @@
                             @endswitch</span></td>
                         <td data-field="Status" class="m-datatable__cell"><span style="width: 160px;">@foreach($admins as $admin) @if($admin->id == $order->user_id) {{$admin->name}}@endif @endforeach</span></td>
                         <td data-field="Amount" class="m-datatable__cell"><span style="width: 160px;">{{$order->amount}}</span></td>
-                        <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right">@if($order->status == 1)<a class="dropdown-item" href="{{route('orders.edit',$order->id)}}"><i class="la la-edit"></i> Edit</a>@endif<a class="dropdown-item" href="{{route('orders.show',$order->id)}}"><i class="la flaticon-laptop"></i>Show</a></span></td>
+                        <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right">@if($order->status == 1)<a class="dropdown-item" href="{{route('orders.edit',$order->id)}}"><i class="la la-edit"></i> Edit</a>@endif<a class="dropdown-item" href="{{route('orders.show',$order->id)}}"><i class="la flaticon-laptop"></i>Show</a><form id="delete-form-{{$order->id}}" method="post" action="{{ route('orders.destroy',$order->id)}}" style="display: none;">
+                            {{csrf_field()}}
+                            {{method_field('DELETE')}}
+
+                          </form>
+                          <a class="dropdown-item"
+                          onclick="
+                          if(confirm('are you sure You want to delete this User')){
+                            event.preventDefault();
+                            document.getElementById('delete-form-{{$order->id}}').submit();
+                          }else{
+                            event.preventDefault();
+                          }"><i class="la flaticon-circle"></i>Delete</a></span></td>
                     </tr>
                 @endforeach
                 </tbody>

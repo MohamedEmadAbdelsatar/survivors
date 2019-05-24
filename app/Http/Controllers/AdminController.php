@@ -152,7 +152,7 @@ class AdminController extends Controller
             $receivers = User::where('hospital_id', $request->hospital)->get();
             Notification::send($receivers, new ChangeStatus($details));
         }
-        return redirect('/home')->withSuccess('Admin Information Updated Successfully');
+        return redirect('/admins')->withSuccess('Admin Information Updated Successfully');
     }
 
     /**
@@ -163,7 +163,15 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $orders = Orders::where('user_id',$id)->get();
+        if(count($orders) != 0){
+            foreach($orders as $order){
+                Orders::where('id',$order->id)->delete();
+            }
+        }
+
+        User::where('id',$id)->delete();
+        return redirect('/admins')->withSuccess('Admin deleted Successfully');
     }
 
 

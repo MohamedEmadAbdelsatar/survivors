@@ -83,6 +83,7 @@
         <thead class="m-datatable__head"><tr class="m-datatable__row" style="height: 56px;">
             <th data-field="ID" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">#</span></th>
             <th data-field="Admin_Name" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Name</span></th>
+            <th data-field="Admin_Email" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Email</span></th>
             <th data-field="Admin_Hospital" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Hospital</span></th>
             <th data-field="Admin_Phone" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Phone</span></th>
             <th data-field="Admin_Role" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 160px;">Role</span></th>
@@ -92,11 +93,25 @@
         @foreach($admins as $admin)
             <tr data-row="0" class="m-datatable__row" style="height: 64px;">
             <td data-field="ID" class="m-datatable__cell"><span style="width: 110px;">{{$loop->index+1}}</span></td>
-                <td data-field="Admin_Name" class="m-datatable__cell"><span style="width: 160px;">{{$admin->name}}</span></td>
+            <td data-field="Admin_Name" class="m-datatable__cell"><span style="width: 160px;">{{$admin->name}}</span></td>
+            <td data-field="Admin_Email" class="m-datatable__cell"><span style="width: 160px;">{{$admin->email}}</span></td>
             <td data-field="Admin_Hospital" class="m-datatable__cell"><span style="width: 160px;">@foreach($hospitals as $hospital) @if($hospital->id == $admin->hospital_id) {{$hospital->name}} @endif @endforeach</span></td>
                 <td data-field="Admin_Phone" class="m-datatable__cell"><span style="width: 160px;">{{$admin->phone}}</span></td>
             <td data-field="Admin_Role" class="m-datatable__cell"><span style="width: 160px;">@if($admin->role_id == 1) {{"Admin"}} @else {{"Hospital Admin"}} @endif</span></td>
-                <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('admins.edit',$admin->id)}}"><i class="la la-edit"></i> Edit</a><a class="dropdown-item" href="{{route('admins.show',$admin->id)}}"><i class="la flaticon-laptop"></i>Show</a></span></td>
+                <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('admins.edit',$admin->id)}}"><i class="la la-edit"></i> Edit</a><a class="dropdown-item" href="{{route('admins.show',$admin->id)}}"><i class="la flaticon-laptop"></i>Show</a>
+                    <form id="delete-form-{{$admin->id}}" method="post" action="{{ route('admins.destroy',$admin->id)}}" style="display: none;">
+                    {{csrf_field()}}
+                    {{method_field('DELETE')}}
+
+                  </form>
+                  <a class="dropdown-item"
+                  onclick="
+                  if(confirm('are you sure You want to delete this User')){
+                    event.preventDefault();
+                    document.getElementById('delete-form-{{$admin->id}}').submit();
+                  }else{
+                    event.preventDefault();
+                  }"><i class="la flaticon-circle"></i>Delete</a></span></td>
             </tr>
         @endforeach
         </tbody>

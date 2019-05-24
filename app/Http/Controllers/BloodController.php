@@ -18,6 +18,11 @@ class BloodController extends Controller
             $balance = Blood::where('hospital_id',$hospital_id)->first();
             return view('admin.blood.modify',compact('balance','notifications','hospital'));
         } else {
+            if($hospital_id != null){
+                if($user->hospital_id != $hospital_id ){
+                    return redirect('/home');
+                }
+            }
             $hospital_id = $user->hospital_id;
             $hospital = Hospital::find($hospital_id);
             $balance = Blood::where('hospital_id',$hospital_id)->first();
@@ -39,6 +44,6 @@ class BloodController extends Controller
         $balance->ab_pos = $request->ab_pos;
         $balance->ab_neg = $request->ab_neg;
         $balance->save();
-        return redirect('/home')->withSuccess('Modified Successfully');
+        return redirect()->back()->withSuccess('Modified Successfully');
     }
 }

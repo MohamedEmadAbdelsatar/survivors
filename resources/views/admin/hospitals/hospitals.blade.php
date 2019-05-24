@@ -89,7 +89,19 @@
                         <td data-field="ID" class="m-datatable__cell"><span style="width: 110px;">{{$hospital->id}}</span></td>
                         <td data-field="ShipName" class="m-datatable__cell"><span style="width: 160px;">{{$hospital->name}}</span></td>
                         <td data-field="ShipAddress" class="m-datatable__cell"><span style="width: 260px;">{{$hospital->address}}</span></td>
-                        <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('hospital.edit',$hospital->id)}}"><i class="la la-edit"></i> Edit</a><a class="dropdown-item" href="{{route('hospital.show',$hospital->id)}}"><i class="la flaticon-laptop"></i>Show</a>@if(Auth::user()->role_id == 1)<a class="dropdown-item" href="{{route('blood/modify',$hospital->id)}}"><i class="la flaticon-laptop"></i>Edit Blood Balance</a> @endif</span></td>
+                        <td data-field="Actions" class="m-datatable__cell"><span style="overflow: visible; width: 110px;"><div class="dropdown "><a href="#" class="btn m-btn m-btn--hover-accent m-btn--icon m-btn--icon-only m-btn--pill" data-toggle="dropdown"><i class="la la-ellipsis-h"></i></a><div class="dropdown-menu dropdown-menu-right"><a class="dropdown-item" href="{{route('hospital.edit',$hospital->id)}}"><i class="la la-edit"></i> Edit</a><a class="dropdown-item" href="{{route('hospital.show',$hospital->id)}}"><i class="la flaticon-laptop"></i>Show</a>@if(Auth::user()->role_id == 1)<a class="dropdown-item" href="{{route('blood/modify',$hospital->id)}}"><i class="la flaticon-laptop"></i>Edit Blood Balance</a> <form id="delete-form-{{$hospital->id}}" method="post" action="{{ route('hospital.destroy',$hospital->id)}}" style="display: none;">
+                            {{csrf_field()}}
+                            {{method_field('DELETE')}}
+
+                          </form>
+                          <a class="dropdown-item"
+                          onclick="
+                          if(confirm('are you sure You want to delete this User')){
+                            event.preventDefault();
+                            document.getElementById('delete-form-{{$hospital->id}}').submit();
+                          }else{
+                            event.preventDefault();
+                          }"><i class="la flaticon-circle"></i>Delete</a>@endif</span></td>
                     </tr>
                 @endforeach
                 </tbody>
