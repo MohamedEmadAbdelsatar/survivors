@@ -93,9 +93,9 @@ class OrdersController extends Controller
         $order->status = 1;
         $order->try = 1;
         if($request->to_id == 0) {
-            $order->direct = 1;
-        } else {
             $order->direct = 0;
+        } else {
+            $order->direct = 1;
         }
         $order->save();
         $blood_type = null;
@@ -329,6 +329,7 @@ class OrdersController extends Controller
                         'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                         'order_id' =>$order->id
                     ];
+                    $order->comment = $request->comment;
                     Notification::send($user, new ChangeStatus($details));
                 }
             } else {
@@ -340,6 +341,7 @@ class OrdersController extends Controller
                         'notification_body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                         'order_id' =>$order->id
                     ];
+                    $order->comment = $request->comment;
                     Notification::send($user, new ChangeStatus($details));
             }
         }

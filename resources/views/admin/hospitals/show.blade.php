@@ -65,7 +65,7 @@
                     </div>
                     <div class="row">
                             <div class="col-md-6"><p> Hospital Phone: {{$hospital->phone}}</p></div>
-                            <div class="col-md-6"><p> Hospital Mail: {{$hospital->mail}}</p></div>
+                            <div class="col-md-6"><p> Hospital Mail: {{$hospital->email}}</p></div>
                     </div>
                     <hr>
                     <h4>Hospital Addmins</h4>
@@ -99,7 +99,7 @@
                                         {{$user->phone}}
                                     </td>
                                     <td>
-                                        {{$user->mail}}
+                                        {{$user->email}}
                                     </td>
                                 </tr>
                                 @endforeach

@@ -122,7 +122,7 @@
         <!-- Modal body -->
         <div class="modal-body">
             <label>Enter The price</label>
-            <input type="number" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Price" name="price">
+            <input type="number" class="form-control m-input" @if(count($orders) != 0) id="{{$order->id}}" @endif placeholder="Enter Price" name="price">
         </div>
 
         <!-- Modal footer -->
@@ -147,7 +147,7 @@
         <!-- Modal body -->
         <div class="modal-body">
             <label>Enter Your comment</label>
-            <input type="text" class="form-control m-input" id="{{$order->id}}" placeholder="Enter Your Comment" name="comment">
+            <input type="text" class="form-control m-input" @if(count($orders) != 0) id="{{$order->id}}" @endif placeholder="Enter Your Comment" name="comment">
         </div>
 
         <!-- Modal footer -->
@@ -255,9 +255,9 @@
                 },
                     success:function(response){
                         if(response != 'ok'){
-                            $('#myModal3').show();
+                            $('#myModal4').show();
                             $('button').click(function(){
-                            $('#myModal3').hide();
+                            $('#myModal4').hide();
                             })
                         } else {
                             $('tr#'+id).remove()

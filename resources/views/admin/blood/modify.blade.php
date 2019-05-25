@@ -54,13 +54,13 @@
                     <label>
                         O+
                     </label>
-                <input type="number" class="form-control m-input" id="o+" value="{{$balance->o_pos}}" name="o_pos">
+                <input type="number" class="form-control m-input" id="o+" value="{{$balance->o_pos ?? '0'}}" name="o_pos">
                 </div>
                 <div class="form-group m-form__group col-md-6"style="padding-top:0px;">
                     <label>
                         O-
                     </label>
-                    <input type="number" class="form-control m-input" id="o-" value="{{$balance->o_neg}}" name="o_neg">
+                    <input type="number" class="form-control m-input" id="o-" value="{{$balance->o_neg ?? '0'}}" name="o_neg">
                 </div>
             </div>
         <input type="hidden" name="hospital_id" value="{{$hospital->id}}">
@@ -69,13 +69,13 @@
                     <label>
                         A+
                     </label>
-                <input type="number" class="form-control m-input" id="a+" value="{{$balance->a_pos}}" name="a_pos">
+                <input type="number" class="form-control m-input" id="a+" value="{{$balance->a_pos ?? '0'}}" name="a_pos">
                 </div>
                 <div class="form-group m-form__group col-md-6"style="padding-top:0px;">
                     <label>
                         A-
                     </label>
-                    <input type="number" class="form-control m-input" id="a-" value="{{$balance->a_neg}}" name="a_neg">
+                    <input type="number" class="form-control m-input" id="a-" value="{{$balance->a_neg ?? '0'}}" name="a_neg">
                 </div>
             </div>
             <div class="row">
@@ -83,13 +83,13 @@
                     <label>
                         B+
                     </label>
-                <input type="number" class="form-control m-input" id="b+" value="{{$balance->b_pos}}" name="b_pos">
+                <input type="number" class="form-control m-input" id="b+" value="{{$balance->b_pos ?? '0'}}" name="b_pos">
                 </div>
                 <div class="form-group m-form__group col-md-6"style="padding-top:0px;">
                     <label>
                         B-
                     </label>
-                    <input type="number" class="form-control m-input" id="b-" value="{{$balance->b_neg}}" name="b_neg">
+                    <input type="number" class="form-control m-input" id="b-" value="{{$balance->b_neg ?? '0'}}" name="b_neg">
                 </div>
             </div>
             <div class="row">
@@ -97,13 +97,13 @@
                     <label>
                         AB+
                     </label>
-                <input type="number" class="form-control m-input" id="ab+" value="{{$balance->ab_pos}}" name="ab_pos">
+                <input type="number" class="form-control m-input" id="ab+" value="{{$balance->ab_pos ?? '0'}}" name="ab_pos">
                 </div>
                 <div class="form-group m-form__group col-md-6"style="padding-top:0px;">
                     <label>
                         AB-
                     </label>
-                    <input type="number" class="form-control m-input" id="ab-" value="{{$balance->ab_neg}}" name="ab_neg">
+                    <input type="number" class="form-control m-input" id="ab-" value="{{$balance->ab_neg ?? '0'}}" name="ab_neg">
                 </div>
             </div>
 
