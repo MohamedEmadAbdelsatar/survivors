@@ -76,7 +76,7 @@
                     <label>
                         Amount
                     </label>
-                    <input type="number" class="form-control m-input" id="amounr" placeholder="Enter Amount" name="amount">
+                    <input type="text" class="form-control m-input" id="amounr" placeholder="Enter Amount" name="amount">
                 </div>
                 <div class="form-group m-form__group col-md-4" style="padding-top:0px;">
                     <label>

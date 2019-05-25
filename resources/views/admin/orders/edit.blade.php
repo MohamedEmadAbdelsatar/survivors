@@ -77,7 +77,7 @@
                     <label>
                         Amount
                     </label>
-                <input type="number" class="form-control m-input" id="amounr" value="{{$order->amount}}" name="amount">
+                <input type="text" class="form-control m-input" id="amounr" value="{{$order->amount}}" name="amount">
                 </div>
                 @if($order->direct == 0)
                 <div class="form-group m-form__group col-md-4" style="padding-top:0px;">

@@ -57,9 +57,9 @@ class HospitalController extends Controller
         $request->validate([
             'name'=>'required|unique:hospitals|max:40',
             'address'=>'required|unique:hospitals',
-            'phone'=>'required|max:11|min:11',
-            'lat'=>'required|unique:hospitals',
-            'lng'=>'required|unique:hospitals',
+            'phone'=>'required|max:11|min:11|numeric',
+            'lat'=>'required|unique:hospitals|numeric',
+            'lng'=>'required|unique:hospitals|numeric',
             'email'=>'required|unique:hospitals'
         ]);
 
@@ -130,9 +130,9 @@ class HospitalController extends Controller
         $request->validate([
             'name'=>'required|max:40',
             'address'=>'required',
-            'phone'=>'required|max:11|min:11',
-            'lat'=>'required',
-            'lng'=>'required'
+            'phone'=>'required|max:11|min:11|numeric',
+            'lat'=>'required|numeric',
+            'lng'=>'required|numeric'
         ]);
 
         $hospital = Hospital::find($id);

@@ -79,7 +79,7 @@
                     <label>
                         Phone Number
                     </label>
-                    <input type="tel" class="form-control m-input" id="phone" value="{{$admin->phone}}" name="phone">
+                    <input type="text" class="form-control m-input" id="phone" value="{{$admin->phone}}" name="phone">
                 </div>
                 <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                     <label>

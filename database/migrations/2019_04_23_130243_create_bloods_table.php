@@ -16,14 +16,14 @@ class CreateBloodsTable extends Migration
         Schema::create('bloods', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('hospital_id');
-            $table->integer('o_pos')->default('0');
-            $table->integer('o_neg')->default('0');
-            $table->integer('a_pos')->default('0');
-            $table->integer('a_neg')->default('0');
-            $table->integer('b_pos')->default('0');
-            $table->integer('b_neg')->default('0');
-            $table->integer('ab_pos')->default('0');
-            $table->integer('ab_neg')->default('0');
+            $table->string('o_pos')->default('0');
+            $table->string('o_neg')->default('0');
+            $table->string('a_pos')->default('0');
+            $table->string('a_neg')->default('0');
+            $table->string('b_pos')->default('0');
+            $table->string('b_neg')->default('0');
+            $table->string('ab_pos')->default('0');
+            $table->string('ab_neg')->default('0');
             $table->timestamps();
         });
     }

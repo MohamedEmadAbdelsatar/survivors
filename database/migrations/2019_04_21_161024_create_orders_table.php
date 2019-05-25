@@ -15,14 +15,14 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('hospital_id');
-            $table->bigInteger('user_id');
-            $table->integer('amount');
-            $table->integer('blood_type');
-            $table->integer('status');
-            $table->bigInteger('to_id')->nullable();
-            $table->integer('try');
-            $table->integer('price')->nullable();
+            $table->string('hospital_id');
+            $table->string('user_id');
+            $table->string('amount');
+            $table->string('blood_type');
+            $table->string('status');
+            $table->string('to_id')->nullable();
+            $table->string('try');
+            $table->string('price')->nullable();
             $table->text('comment')->nullable();
             $table->integer('direct')->default(0);
             $table->timestamps();

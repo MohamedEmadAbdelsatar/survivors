@@ -60,7 +60,7 @@ class OrdersController extends Controller
         3 -> refused
         */
         $request->validate([
-            "amount"=>"required",
+            "amount"=>"required|numeric",
         ]);
         $user_id = Auth::user()->id;
         $user = User::find($user_id);
@@ -173,7 +173,7 @@ class OrdersController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            "amount"=>"required",
+            "amount"=>"required|numeric",
         ]);
         $user_id = Auth::user()->id;
         $user = User::find($user_id);

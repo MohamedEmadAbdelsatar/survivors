@@ -17,10 +17,10 @@ class CreateHospitalsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name',40);
             $table->string('address', 255);
-            $table->float('lat')->nullable();
-            $table->float('lng')->nullable();
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->string('email')->nullable();
-            $table->bigInteger('phone');
+            $table->string('phone');
             $table->timestamps();
         });
     }

@@ -92,13 +92,13 @@
                         <label>
                                 Latitude
                         </label>
-                        <input type="number" step="any" class="form-control m-input" id="lat" placeholder="Enter Latitude" name="lat">
+                        <input type="text" step="any" class="form-control m-input" id="lat" placeholder="Enter Latitude" name="lat">
                     </div>
                     <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                         <label>
                                 Longitude
                         </label>
-                        <input type="number" step="any" class="form-control m-input" id="lng" placeholder="Enter Longitude" name="lng">
+                        <input type="text" step="any" class="form-control m-input" id="lng" placeholder="Enter Longitude" name="lng">
                     </div>
                 </div>
             </div>

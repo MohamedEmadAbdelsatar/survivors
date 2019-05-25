@@ -84,7 +84,7 @@
                         <label>
                             Phone Number
                         </label>
-                        <input type="tel" class="form-control m-input" id="phone" placeholder="Enter Phone" name="phone" value="{{$hospital->phone}}">
+                        <input type="text" class="form-control m-input" id="phone" placeholder="Enter Phone" name="phone" value="{{$hospital->phone}}">
                     </div>
             </div>
             <h3> Coordinates</h3>
@@ -93,13 +93,13 @@
                         <label>
                                 Latitude
                         </label>
-                        <input type="number" step="any" class="form-control m-input" id="lat" placeholder="Enter Latitude" name="lat" value="{{$hospital->lat}}">
+                        <input type="text" step="any" class="form-control m-input" id="lat" placeholder="Enter Latitude" name="lat" value="{{$hospital->lat}}">
                     </div>
                     <div class="form-group m-form__group col-md-6" style="padding-top:0px;">
                         <label>
                                 Longitude
                         </label>
-                        <input type="number" step="any" class="form-control m-input" id="lng" placeholder="Enter Longitude" name="lng" value="{{$hospital->lng}}">
+                        <input type="text" step="any" class="form-control m-input" id="lng" placeholder="Enter Longitude" name="lng" value="{{$hospital->lng}}">
                     </div>
                 </div>
             </div>
