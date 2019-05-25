@@ -26,9 +26,9 @@
                     -
                 </li>
                 <li class="m-nav__item">
-                <a href="{{route('orders/received')}}" class="m-nav__link">
+                <a href="{{route('orders/pending')}}" class="m-nav__link">
                         <span class="m-nav__link-text">
-                            Received Orders
+                            Pending Orders
                         </span>
                     </a>
                 </li>

@@ -41,6 +41,7 @@ class ChangeStatus extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
+                    ->subject($this->details['subject'])
                     ->greeting($this->details['greeting'])
                     ->line($this->details['body'])
                     ->line($this->details['thanks']);

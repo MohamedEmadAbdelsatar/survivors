@@ -88,7 +88,7 @@
                         @endswitch
                         </span></td>
                         <td data-field="Status" class="m-datatable__cell"><span style="width: 160px;">@switch($order->status)
-                            @case(1) <span class="m-badge m-badge--brand m-badge--wide">Pending</span> @break
+
                             @case(2) <span class="m-badge  m-badge--success m-badge--wide">Accepted</span> @break
                             @case(3) <span class="m-badge  m-badge--danger m-badge--wide">Refused</span> @break
                             @endswitch</span></td>

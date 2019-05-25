@@ -110,6 +110,7 @@ class OrdersController extends Controller
         }
 
         $details = [
+                'subject' =>'new order',
                 'greeting' => 'Hi,',
                 'body' => $current_hospital->name.' orderd '.$order->amount.' of '.$blood_type.' blood bags',
                 'thanks' => 'Thank you for using survivors.com ',
@@ -258,6 +259,7 @@ class OrdersController extends Controller
             $balance->save();
             $check_balance->save();
             $details = [
+                'subject' =>'Accepted order',
                 'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
                 'body' => $sender_hospital->name.' accepted your order',
                 'thanks' => 'Thank you for using survivors.com ',
@@ -300,6 +302,7 @@ class OrdersController extends Controller
                             case 8: $blood_type = "AB-"; break;
                         }
                         $details = [
+                            'subject' =>'new order',
                             'greeting' => 'Hi '.$dest_hospital->name."Admin",
                             'body' => $receiver_hospital->name.' orderd '.$order->amount.' of '.$blood_type,
                             'thanks' => 'Thank you for using survivors.com ',
@@ -311,6 +314,7 @@ class OrdersController extends Controller
                     } else {
                         $order->status = 3;
                         $details = [
+                            'subject' =>'Refused order',
                             'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
                             'body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                             'thanks' => 'Thank you for using survivors.com ',
@@ -323,6 +327,7 @@ class OrdersController extends Controller
                 } else {
                     $order->status = 3;
                     $details = [
+                        'subject' =>'Refused order',
                         'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
                         'body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                         'thanks' => 'Thank you for using survivors.com ',
@@ -335,6 +340,7 @@ class OrdersController extends Controller
             } else {
                 $order->status = 3;
                     $details = [
+                        'subject' =>'Refused order',
                         'greeting' => 'Hi '.$receiver_hospital->name.' Admins',
                         'body' => 'sorry, '.$sender_hospital->name.' we refused your order',
                         'thanks' => 'Thank you for using survivors.com ',
@@ -352,7 +358,8 @@ class OrdersController extends Controller
         $user = Auth::user();
         $notifications = $user->notifications;
         $hospital = Hospital::find($user->hospital_id);
-        $orders = Orders::where('hospital_id',$user->hospital_id)->get();
+        $orders = Orders::where('to_id',$user->hospital_id)
+                            ->where('status','!=','1')->get();
         $admins = User::where('hospital_id',$user->hospital_id)->get();
         return view('admin.orders.hospital_orders',compact('notifications','hospital','orders','admins'));
     }

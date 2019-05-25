@@ -30,7 +30,6 @@
     <meta name="author" content="Kamal">
     @yield('meta')
 
-    <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/droid-arabic-kufi" type="text/css"/>
 
     @stack('styles')
     @yield('styles')
@@ -310,12 +309,12 @@
 											</span>
                                         </li>
 										<li class="m-menu__item " aria-haspopup="true">
-                                        <a href="{{route('orders/received')}}" class="m-menu__link ">
+                                        <a href="{{route('orders/pending')}}" class="m-menu__link ">
 												<i class="m-menu__link-bullet m-menu__link-bullet--dot">
 													<span></span>
 												</i>
 												<span class="m-menu__link-text">
-													Received Orders
+													Pending Orders
 												</span>
 											</a>
                                         </li>

@@ -56,7 +56,7 @@ class AdminController extends Controller
         $this->validate($request,[
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|numeric',
+            'phone' => 'required|digits:11',
             'password' => 'required|string|min:6'
         ]);
         $request['password'] = bcrypt($request->password);
@@ -70,6 +70,7 @@ class AdminController extends Controller
             $admin->hospital_id = $request->hospital;
         }
         $admin->save();
+        Mail::to($admin->email)->send(new newAdmin());
         return redirect('/admins')->withSuccess('Admin Created Successfully');
 
     }
@@ -124,7 +125,7 @@ class AdminController extends Controller
         $this->validate($request,[
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255',
-            'phone' => 'required|numeric',
+            'phone' => 'required|digits:11',
         ]);
 
 
@@ -141,17 +142,6 @@ class AdminController extends Controller
             $admin->hospital_id = $request->hospital;
         }
         $admin->save();
-        if($admin->role != 1){
-            $hospital = Hospital::find($request->hospital);
-            $details = [
-                'greeting' => 'Hi '.$hospital->name.' Admins',
-                'body' => 'a new admin'.$request->name.' is added to your stuff',
-                'thanks' => 'Thank you for using survivors.com ',
-                'notification_body' => 'a new admin'.$request->name.' is added to your stuff',
-            ];
-            $receivers = User::where('hospital_id', $request->hospital)->get();
-            Notification::send($receivers, new ChangeStatus($details));
-        }
         return redirect('/admins')->withSuccess('Admin Information Updated Successfully');
     }
 

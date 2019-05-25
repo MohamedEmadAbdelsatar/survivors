@@ -77,6 +77,7 @@
                 <th data-field="Hospital_Name" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 130px;">Hospital Name</span></th>
                 <th data-field="User" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 80px;">User</span></th>
                 <th data-field="Blood Type" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">Blood Type</span></th>
+                <th data-field="To Hospital" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 110px;">To Hospital</span></th>
                 <th data-field="Amount" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">Amount</span></th>
                 <th data-field="Price" class="m-datatable__cell m-datatable__cell--sort"><span style="width: 100px;">Price</span></th>
 
@@ -98,6 +99,7 @@
                     @case(7) {{"AB+"}} @break
                     @case(8) {{"AB-"}} @break
                     @endswitch</span></td>
+                    <td data-field="To Hospital" class="m-datatable__cell"><span style="width: 100px;">@foreach($hospitals as $hospital) @if($hospital->id == $order->to_id){{$hospital->name}}@endif @endforeach</span></td>
                 <td data-field="Amount" class="m-datatable__cell"><span style="width: 100px;">{{$order->amount}}</span></td>
                 <td data-field="Price" class="m-datatable__cell"><span style="width: 100px;">{{$order->price}}</span></td>
 
