@@ -28,6 +28,6 @@ class newAdmin extends Mailable
      */
     public function build()
     {
-        return $this->view('admin.mail2');
+        return $this->view('admin.mail1');
     }
 }

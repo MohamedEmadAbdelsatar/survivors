@@ -7,6 +7,8 @@ use App\Hospital;
 use Auth;
 use App\Orders;
 use Illuminate\Http\Request;
+use Mail;
+use App\Mail\newAdmin;
 
 class AdminController extends Controller
 {
@@ -67,7 +69,12 @@ class AdminController extends Controller
         $admin->phone = $request->phone;
         $admin->role_id = $request->role;
         if($admin->role != 1){
-            $admin->hospital_id = $request->hospital;
+            if(!$request->hospital){
+                return redirect()->back()->with('error','You should Choose Hospital');
+            } else{
+                $admin->hospital_id = $request->hospital;
+            }
+
         }
         $admin->save();
         Mail::to($admin->email)->send(new newAdmin());

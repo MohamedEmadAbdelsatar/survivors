@@ -97,7 +97,7 @@
                     </label>
                     <select class="form-control m-input m-input--square" id="role" name="role">
                         <option id="1" value="1" @if($admin->role_id == 1) selected @endif>Admin</option>
-                        <option id="2" vlaue="2" @if($admin->role_id == 2) selected @endif>Hospital Admin</option>
+                        <option id="2" value="2" @if($admin->role_id == 2) selected @endif>Hospital Admin</option>
                     </select>
                 </div>
                 @endif
