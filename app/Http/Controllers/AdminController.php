@@ -70,11 +70,10 @@ class AdminController extends Controller
         $admin->role_id = $request->role;
         if($admin->role != 1){
             if(!$request->hospital){
-                return redirect()->back()->with('error','You should Choose Hospital');
+                return redirect()->back()->with('error','You Should Choose a Hospital');
             } else{
                 $admin->hospital_id = $request->hospital;
             }
-
         }
         $admin->save();
         Mail::to($admin->email)->send(new newAdmin());
@@ -146,7 +145,11 @@ class AdminController extends Controller
         $admin->phone = $request->phone;
         $admin->role_id = $request->role;
         if($admin->role != 1){
-            $admin->hospital_id = $request->hospital;
+            if(!$request->hospital){
+                return redirect()->back()->with('You should Choose Hospital');
+            } else{
+                $admin->hospital_id = $request->hospital;
+            }
         }
         $admin->save();
         return redirect('/admins')->withSuccess('Admin Information Updated Successfully');

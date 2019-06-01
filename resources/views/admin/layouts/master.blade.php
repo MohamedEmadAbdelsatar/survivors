@@ -418,6 +418,16 @@
                                                 </span>
                                             </a>
                                         </li>
+                                        <li class="m-menu__item " aria-haspopup="true">
+                                                <a href="{{route('contacts')}}" class="m-menu__link ">
+                                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                            <span></span>
+                                                        </i>
+                                                        <span class="m-menu__link-text">
+                                                            Contacts
+                                                        </span>
+                                                    </a>
+                                                </li>
                                 @endif
 
                 </ul>

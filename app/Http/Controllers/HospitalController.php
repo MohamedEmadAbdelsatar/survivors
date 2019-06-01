@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\SendMailable;
 
 
+
 class HospitalController extends Controller
 {
     /**

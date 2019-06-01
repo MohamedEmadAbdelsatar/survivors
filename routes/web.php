@@ -15,7 +15,10 @@ Route::get('/', function () {
     $about = About::find(1);
     return view('user.post',compact('about'));
 });
-
+Route::get('contactus', function(){
+    return view('admin.contact.contactus');
+});
+Route::post('contact/save','ContactController@savecontact')->name('contact/save');
 Auth::routes();
 Route::group(['middleware' => ['auth']], function() {
     Route::get('/home', 'HomeController@index')->name('home');
@@ -31,5 +34,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('hospital','HospitalController');
     Route::resource('admins','AdminController');
     Route::resource('orders','OrdersController');
+    Route::get('contacts','ContactController@index')->name('contacts');
+    Route::post('contact/delete','ContactController@delete')->name('contact/delete');
 });
 
