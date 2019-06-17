@@ -201,7 +201,7 @@ class OrdersController extends Controller
         return redirect('hospital/orders')->withSuccess('Order Deleted Successfully');
     }
 
-    public function show_received(){
+    public function show_pending(){
         $user = Auth::user();
         $notifications = $user->notifications;
         if($user->role_id == 1){
