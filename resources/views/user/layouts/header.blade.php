@@ -8,7 +8,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive" >
           <ul class="navbar-nav ml-auto">
-
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('contactus')}}">Contact Us</a>
+            </li>
             <li class="nav-item">
               @if(Auth::guest())
               <a class="nav-link" href="{{route('login')}}">Login</a>
@@ -31,7 +33,7 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url(@yield('bg-img'))">
+    <header class="masthead" style="background-image: url('{{url('storage/'.$about->image)}}')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">

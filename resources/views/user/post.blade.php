@@ -1,6 +1,6 @@
 @extends('user/app')
 
-@section('bg-img',Storage::disk('local')->url($about->image))
+
 
 @section('head')
 <link rel="stylesheet" type="text/css" href="{{asset('default/assets/user/css/prism.css')}}">

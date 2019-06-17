@@ -17,7 +17,7 @@ Route::get('/', function () {
 });
 Route::get('contactus', function(){
     return view('admin.contact.contactus');
-});
+})->name('contactus');
 Route::post('contact/save','ContactController@savecontact')->name('contact/save');
 Auth::routes();
 Route::group(['middleware' => ['auth']], function() {

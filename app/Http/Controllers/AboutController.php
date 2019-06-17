@@ -6,6 +6,8 @@ use Auth;
 use App\User;
 use App\About;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class AboutController extends Controller
 {
@@ -24,13 +26,20 @@ class AboutController extends Controller
             'title' => 'required',
             'body' => 'required',
         ]);
+        /*
         if($request->hasFile('image')){
             $imageName = $request->image->store('public');
+        }
+        */
+        if($request->hasFile('image')){
+            $cover = $request->file('image');
+            $extension = $cover->getClientOriginalExtension();
+            Storage::disk('public')->put($cover->getFilename().'.'.$extension,  File::get($cover));
         }
         $about = About::find(1);
         $about->title = $request->title;
         if($request->hasFile('image')){
-            $about->image = $imageName;
+            $about->image = $cover->getFilename().'.'.$extension;
         }
         $about->body = $request->body;
         $about->save();

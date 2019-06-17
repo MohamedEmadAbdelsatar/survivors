@@ -341,25 +341,25 @@
                                         @if(Auth::user()->role_id == 2)
                                         <li class="m-menu__item " aria-haspopup="true">
                                             <a href="{{route('hospital/orders')}}" class="m-menu__link ">
-                                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                                        <span></span>
-                                                    </i>
-                                                    <span class="m-menu__link-text">
-                                                        Hospital's Orders
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            @endif
-                                            @if(Auth::user()->role_id == 2)
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Hospital's Orders
+                                                </span>
+                                            </a>
+                                        </li>
+                                        @endif
+                                        @if(Auth::user()->role_id == 2)
                                         <li class="m-menu__item " aria-haspopup="true">
-                                                <a href="{{route('orders.create')}}" class="m-menu__link ">
-                                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                                            <span></span>
-                                                        </i>
-                                                        <span class="m-menu__link-text">
-                                                            Create Order
-                                                        </span>
-                                                    </a>
+                                            <a href="{{route('orders.create')}}" class="m-menu__link ">
+                                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                                    <span></span>
+                                                </i>
+                                                <span class="m-menu__link-text">
+                                                    Create Order
+                                                </span>
+                                            </a>
                                         </li>
                                         @endif
 									</ul>

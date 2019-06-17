@@ -74,6 +74,8 @@ class AdminController extends Controller
             } else{
                 $admin->hospital_id = $request->hospital;
             }
+        } else {
+                $admin->hospital_id = null;
         }
         $admin->save();
         Mail::to($admin->email)->send(new newAdmin());
@@ -150,6 +152,8 @@ class AdminController extends Controller
             } else{
                 $admin->hospital_id = $request->hospital;
             }
+        } else {
+            $admin->hospital_id = null;
         }
         $admin->save();
         return redirect('/admins')->withSuccess('Admin Information Updated Successfully');
